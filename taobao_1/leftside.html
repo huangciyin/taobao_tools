@@ -1,0 +1,70 @@
+<div class="span4" style="border-width:thin;border:1px solid #dddddd;background-color:#f2f8fa;margin-left:60px;">
+	<ul style="font-size:20px;">
+		<a href="index.php">订单查询</a>
+	</ul>
+	<ul style="font-size:20px;">
+		<label>订单打印</label>
+		<li><a href="unprint.php">未打印</a></li><br>
+		<li><a href="printed.php">已打印</a></li><br>
+		<li><a href="sent.php">已发货</a></li>
+	</ul>
+	<ul style="font-size:20px;">
+		<label>售后跟踪</label>
+		<li><a href="refund.php">退款</a></li><br>
+		<li><a href="#">退换</a></li>
+		<!-- <li><a href="#">私了</a></li> -->
+	</ul>
+	<ul style="font-size:20px;">
+		<label>库存</label>
+		<!-- <li><a href="#">修改前端库存</a></li><br> -->
+		<li><a href="stock.php">库存管理</a></li><br>
+		<li><a href="#">缺货/补货汇总</a></li>
+	</ul>
+	<ul style="font-size:20px;">
+		<label>设置</label>
+		<li><a href="javascript:void(0);" id="setuser">发件人信息设置</a></li>
+	</ul>
+	<ul style="font-size:20px;">
+		<label>反馈</label>
+	</ul>
+</div>
+<div id="dialog-setuser" title="发件人信息设置">
+<?php
+	$result=$operatedb->Execsql("select * from user where uID=".$uID."",$conn);
+	$userName=$result[0]['userName'];
+	$userAddress=$result[0]['userAddress'];
+	$userTel=$result[0]['userTel'];
+	$userShopname=$result[0]['userShopname'];
+?>
+<table class="table table-bordered">
+	<tr>
+		<td colspan="2"><label>姓名</label><input type="text" id="username" value=<?php echo "\"".$userName."\"";?>></td>
+		<td colspan="2"><label>手机</label><input type="text" id="usertel" value=<?php echo "\"".$userTel."\"";?>></td>
+		<td colspan="2"><label>店名</label><input type="text" id="usershopname" value=<?php echo "\"".$userShopname."\"";?>></td>
+	</tr>
+	<tr>
+		<td colspan="6"><label>地址</label><input type="text" id="useraddress" style="width:500px;" value=<?php echo "\"".$userAddress."\"";?>><button id="insert">确定</button></td>
+	</tr>
+</table>
+</div>
+<script type="text/javascript">
+$(function(){
+	$( "#dialog-setuser" ).dialog({
+	    autoOpen: false,
+	    width:620
+	  });
+
+	$("#setuser").click(function(){
+		$( "#dialog-setuser" ).dialog( "open" );
+	});
+	$("#insert").click(function(){
+		var username=$("#username").val();
+		var usertel=$("#usertel").val();
+		var usershopname=$("#usershopname").val();
+		var useraddress=$("#useraddress").val();
+		var url="print.php?username="+username+"&usertel="+usertel+"&usershopname="+usershopname+"&useraddress="+useraddress;
+		$.get(url);
+		$("#dialog").dialog("close");
+	});
+});
+</script>

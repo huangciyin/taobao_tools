@@ -1,0 +1,48 @@
+#name{
+	height: 20px;
+	width: 80px;
+	border: 1px solid red;
+	top: 230px;
+	left: 490px;
+	position: relative;
+}
+#address{
+	height: 50px;
+	width: 250px;
+	border: 1px solid red;
+	top: 130px;
+	left: 470px;
+	position: relative;
+}
+#mobile{
+	height: 20px;
+	width: 100px;
+	border: 1px solid red;
+	top: 10px;
+	left: 690px;
+	position: relative;
+}
+#sendname{
+	height: 20px;
+	width: 80px;
+	border: 1px solid red;
+	top: -10px;
+	left: 120px;
+	position: relative;
+}
+#sendtel{
+	height: 20px;
+	width: 100px;
+	border: 1px solid red;
+	top: 60px;
+	left: 150px;
+	position: relative;
+}
+#sendaddress{
+	height: 50px;
+	width: 250px;
+	border: 1px solid red;
+	top: 34px;
+	left: 107px;
+	position: relative;
+}
