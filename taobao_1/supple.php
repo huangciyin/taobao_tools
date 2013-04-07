@@ -16,7 +16,10 @@
 	$uID=$user_resp->user->user_id;
 
 
-	$result_page=$operatedb->Execsql("select count(*) from orders where uID='".$uID."' and printStatus=''",$conn);
+	require_once 'request.php';
+	getData('refund');
+
+	$result_page=$operatedb->Execsql("select count(*) from refundlist where uID='".$uID."' and status='0'",$conn);
 	if (isset($_GET['pageNo'])&&!empty($_GET['pageNo'])) {
 		# code...
 		$pageNo=$_GET['pageNo'];
@@ -41,7 +44,7 @@ li{
 	font-size: 15px;
 }
 tbody{
-	font-size: 12px;
+	font-size: 11px;
 }
 </style>
 <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
@@ -50,20 +53,28 @@ tbody{
 <script type="text/javascript" src="http://code.jquery.com/ui/1.10.1/jquery-ui.js"></script>
 <script>
 	$(function() {
-	  $( "#dialog" ).dialog({
-	    autoOpen: false,
-	    width:910
-	  });
 
-	  $( ".opener" ).click(function() {
-	  	var tid=$(this).parent().parent().children("td:eq(0)").html();
-	  	var url="print.php?tid="+tid;
+		$(".mark").click(function(){
+			if ($(this).text()!="确定") {
+				$(this).parent().children("input:eq(0)").removeAttr("style");
+				$(this).text("确定");
+			} else{
+				var refundID=$(this).parent().parent().children("td:eq(0)").html();
+				var value=$(this).parent().children("input:eq(0)").val();
+				var url="print.php?insertmark="+value+"&refundID="+refundID;
+				$.get(url);
+				$(this).parent().children("input:eq(0)").attr("style","display:none");
+				$(this).text(value);
+			};
+		});
 
-	  	$.get(url,function(result){
-	  		$("#dialog").html(result);
-	  	});
+	  $( ".insert" ).click(function() {
+	  	var num_iid=$(this).parent().parent().children("td:eq(1)").html();
+	  	var refund=$(this).parent().parent().children("td:eq(0)").html();
+	  	var url="print.php?insert="+num_iid+"&refund="+refund;
+	  	$.get(url);
+	  	$(this).html("已添加");
 
-	    $( "#dialog" ).dialog( "open" );
 	  });
 	});
 </script>
@@ -75,27 +86,27 @@ tbody{
 		</div>
 		<div class="row">
 			<?php include 'leftside.html';?>
-			<div class="span18" style="border-width:thin;border:1px solid #dddddd; padding:7px;">
+			<div class="span18" style="border-width:thin;border:1px solid #dddddd; padding:10px;">
 				<table class="table table-bordered table-condensed" style="margin-top: 10px;">
 					<colgroup>
 		                <col class="span2"></col>
 		                <col class="span2"></col>
 		                <col class="span5"></col>
-						<col class="span2"></col>
+						<col class="span5"></col>
 						<col class="span2"></col>
             		</colgroup>
 					<thead>
 						<tr>
-							<th>交易编号</th>
-							<th>收件人姓名</th>
-							<th>收件人地址</th>
-							<th>收件人电话</th>
+							<th>退货编号</th>
+							<th>货物编号</th>
+							<th>物品名称</th>
+							<th>备注</th>
 							<th>操作</th>
 						</tr>
 					</thead>
 					<tbody>
 						<?php
-							$result=$operatedb->Execsql("select * from orders where uID='".$uID."' and printStatus='' limit ".$pagenum.",20",$conn);
+							$result=$operatedb->Execsql("select * from refundlist where uID='".$uID."' and status='0' limit ".$pagenum.",20",$conn);
 							// $per = (( $pageNo == $lastPage) ? $result_page[0][0]%20-1 : 19);
 							if ($pageNo<$lastPage) {
 								# code...
@@ -108,15 +119,15 @@ tbody{
 							while ($i <= $per) {
 								# code...
 								echo "<tr>";
-								echo "<td>".$result[$i]['tID']."</td>";
-								$req=new TradeFullinfoGetRequest;
-								$req->setFields("receiver_name,receiver_state,receiver_city,receiver_district,receiver_address,receiver_mobile");
-								$req->setTid($result[$i]['tID']);
+								echo "<td>".$result[$i]['refundID']."</td>";
+								$req = new RefundGetRequest;
+								$req->setFields("created,title,reason,num_iid");
+								$req->setRefundId($result[$i]['refundID']);
 								$resp=$c->execute($req,$sessionKey);
-								echo "<td>".$resp->trade->receiver_name."</td>";
-								echo "<td>".$resp->trade->receiver_state.$resp->trade->receiver_city.$resp->trade->receiver_district.$resp->trade->receiver_address."</td>";
-								echo "<td>".$resp->trade->receiver_mobile."</td>";
-								echo "<td><a href=\"javascript:void(0);\" class=\"opener\">打印快递单</a></td>";
+								echo "<td>".$resp->refund->num_iid."</td>";
+								echo "<td>".$resp->refund->title."</td>";
+								echo "<td><input type=\"text\" style=\"display:none;\"><a href=\"javascript:void(0);\" class=\"mark\">".$result[$i]['mark']."</a></td>";
+								echo "<td><a href=\"javascript:void(0);\" class=\"insert\">添加到库存</a></td>";
 								echo "</tr>";
 								$i++;
 							}
@@ -133,10 +144,9 @@ tbody{
  		# code...
  		$total=200;
  	}
- 	$page=new Fenye($total,20,'unprint.php');
+ 	$page=new Fenye($total,20,'supple.php');
  	$page->showFenye($pageNo);
  ?>
 </div>
-<div id="dialog" title="快递详细"></div>
 </body>
 </html>

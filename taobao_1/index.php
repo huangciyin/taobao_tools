@@ -15,18 +15,16 @@
 	$user_resp = $c->execute($user_req, $sessionKey);
 	$uID=$user_resp->user->user_id;
 
+	require_once 'request.php';
+	getData('order');
 
-	$result=get_url_content("http://localhost/sandbox/request.php?type=order");
-
-
-	$result_page=$operatedb->Execsql("select count(*) from orders where uID='".$uID."'",$conn);
-	if (isset($_GET['pageNo'])&&!empty($_GET['pageNo'])) {
-		# code...
+	$result_page=$operatedb->Execsql("select count(uID) from orders where uID='".$uID."'",$conn);
+	if ( isset( $_GET['pageNo']) && !empty( $_GET['pageNo'])) {
 		$pageNo=$_GET['pageNo'];
 	}else{
-		$pageNo=1;
+		$pageNo = 1;
 	}
-	$pagenum=($pageNo-1)*20;
+	$itemNum=($pageNo-1)*20;
 	$lastPage=ceil($result_page[0][0]/20);
 ?>
 <html>
@@ -142,7 +140,11 @@ tbody{
 					</thead>
 					<tbody>
 						<?php
-							$result=$operatedb->Execsql("select * from orders where uID='".$uID."' limit ".$pagenum.",20",$conn);
+
+							$result=$operatedb->Execsql("select * from orders where uID='".$uID."' limit ".$itemNum.",20",$conn);
+
+							// $per = (( $pageNo == $lastPage) ? $result_page[0][0]%20-1 : 19);
+							 
 							if ($pageNo<$lastPage) {
 								# code...
 								$per=19;

@@ -11,23 +11,23 @@
 	<ul style="font-size:20px;">
 		<label>售后跟踪</label>
 		<li><a href="refund.php">退款</a></li><br>
-		<li><a href="#">退换</a></li>
-		<!-- <li><a href="#">私了</a></li> -->
 	</ul>
 	<ul style="font-size:20px;">
 		<label>库存</label>
-		<!-- <li><a href="#">修改前端库存</a></li><br> -->
 		<li><a href="stock.php">库存管理</a></li><br>
-		<li><a href="#">缺货/补货汇总</a></li>
+		<li><a href="supple.php">手动补货</a></li>
 	</ul>
 	<ul style="font-size:20px;">
 		<label>设置</label>
 		<li><a href="javascript:void(0);" id="setuser">发件人信息设置</a></li>
+		<li><a href="javascript:void(0);" id="custom">快递模板设置</a></li>
 	</ul>
 	<ul style="font-size:20px;">
 		<label>反馈</label>
 	</ul>
 </div>
+
+
 <div id="dialog-setuser" title="发件人信息设置">
 <?php
 	$result=$operatedb->Execsql("select * from user where uID=".$uID."",$conn);
@@ -47,7 +47,45 @@
 	</tr>
 </table>
 </div>
+
+
+<div id="dialog-custom" title="快递模板设置">
+	<link rel="stylesheet" type="text/css" id="style" href="css/express/customexpress.css">
+	<div id="radio" style="margin-bottom:20px;">
+		<div style="width:130px; height:20px; float:left;">自定义快递模板一<input type="radio" checked="checked" name="customexpress" onclick="customexpress1()"></div>
+		<div style="width:130px; height:20px; float:left;">自定义快递模板二<input type="radio" name="customexpress" onclick="customexpress2()"></div>
+		<div style="width:130px; height:20px; float:left;">自定义快递模板三<input type="radio" name="customexpress" onclick="customexpress3()"></div>
+	</div>
+	<div id="img" style="height:500px; width:910px; background-image:url(source/sto.PNG);">
+		<div id="name">收件人姓名</div>
+		<div id="address">收件人地址</div>
+		<div id="mobile">收件人电话</div>
+		<div id="sendname">发件人姓名</div>
+		<div id="sendaddress">发件人地址</div>
+		<div id="sendtel">发件人电话</div>
+	</div>
+	<input type="submit" value="确定" id="updatecss" onclick="updatecss('customExpress1')">
+</div>
 <script type="text/javascript">
+$("#name").draggable();
+$("#address").draggable();
+$("#mobile").draggable();
+$("#sendname").draggable();
+$("#sendaddress").draggable();
+$("#sendtel").draggable();
+
+var url="readcss.php?customexpress1";
+$.get(url,function(result){
+	var arr1=result.split("%");
+	$("#name").css({"left":arr1[0],"top":arr1[1]});
+	$("#address").css({"left":arr1[2],"top":arr1[3]});
+	$("#mobile").css({"left":arr1[4],"top":arr1[5]});
+	$("#sendname").css({"left":arr1[6],"top":arr1[7]});
+	$("#sendaddress").css({"left":arr1[8],"top":arr1[9]});
+	$("#sendtel").css({"left":arr1[10],"top":arr1[11]});
+});
+
+
 $(function(){
 	$( "#dialog-setuser" ).dialog({
 	    autoOpen: false,
@@ -67,4 +105,78 @@ $(function(){
 		$("#dialog").dialog("close");
 	});
 });
+
+$(function(){
+	$("#dialog-custom").dialog({
+		autoOpen:false,
+		width:910
+	});
+	$("#custom").click(function(){
+		$("#dialog-custom").dialog("open");
+	});
+});
+
+function updatecss(css)
+{
+	var nameleft=$("#name").css("left");
+	var nametop=$("#name").css("top");
+	var addressleft=$("#address").css("left");
+	var addresstop=$("#address").css("top");
+	var mobileleft=$("#mobile").css("left");
+	var mobiletop=$("#mobile").css("top");
+	var sendnameleft=$("#sendname").css("left");
+	var sendnametop=$("#sendname").css("top");
+	var sendaddressleft=$("#sendaddress").css("left");
+	var sendaddresstop=$("#sendaddress").css("top");
+	var sendtelleft=$("#sendtel").css("left");
+	var sendteltop=$("#sendtel").css("top");
+
+	var customexpress=nameleft+nametop+addressleft+addresstop+mobileleft+mobiletop+sendnameleft+sendnametop+sendaddressleft+sendaddresstop+sendtelleft+sendteltop;
+
+	 var cssurl="print.php?css="+css+"&customexpress="+customexpress;
+	 $.get(cssurl);
+}
+
+function customexpress1()
+{
+	$("#updatecss").attr('onclick','updatecss(\'customExpress1\')');
+	var url1="readcss.php?customexpress1";
+	$.get(url1,function(result1){
+	var arr1=result1.split("%");
+	$("#name").css({"left":arr1[0],"top":arr1[1]});
+	$("#address").css({"left":arr1[2],"top":arr1[3]});
+	$("#mobile").css({"left":arr1[4],"top":arr1[5]});
+	$("#sendname").css({"left":arr1[6],"top":arr1[7]});
+	$("#sendaddress").css({"left":arr1[8],"top":arr1[9]});
+	$("#sendtel").css({"left":arr1[10],"top":arr1[11]});
+});
+}
+function customexpress2()
+{
+	$("#updatecss").attr('onclick','updatecss(\'customExpress2\')');
+	var url2="readcss.php?customexpress2";
+	$.get(url2,function(result2){
+	var arr2=result2.split("%");
+	$("#name").css({"left":arr2[0],"top":arr2[1]});
+	$("#address").css({"left":arr2[2],"top":arr2[3]});
+	$("#mobile").css({"left":arr2[4],"top":arr2[5]});
+	$("#sendname").css({"left":arr2[6],"top":arr2[7]});
+	$("#sendaddress").css({"left":arr2[8],"top":arr2[9]});
+	$("#sendtel").css({"left":arr2[10],"top":arr2[11]});
+});
+}
+function customexpress3()
+{
+	$("#updatecss").attr('onclick','updatecss(\'customExpress3\')');
+	var url3="readcss.php?customexpress3";
+	$.get(url3,function(result3){
+	var arr3=result3.split("%");
+	$("#name").css({"left":arr3[0],"top":arr3[1]});
+	$("#address").css({"left":arr3[2],"top":arr3[3]});
+	$("#mobile").css({"left":arr3[4],"top":arr3[5]});
+	$("#sendname").css({"left":arr3[6],"top":arr3[7]});
+	$("#sendaddress").css({"left":arr3[8],"top":arr3[9]});
+	$("#sendtel").css({"left":arr3[10],"top":arr3[11]});
+});
+}
 </script>

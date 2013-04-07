@@ -16,7 +16,8 @@
 	$uID=$user_resp->user->user_id;
 
 
-	$result=get_url_content("http://localhost/sandbox/request.php?type=refund");
+	require_once 'request.php';
+	getData('refund');
 
 	$result_page=$operatedb->Execsql("select count(*) from refundlist where uID='".$uID."'",$conn);
 	if (isset($_GET['pageNo'])&&!empty($_GET['pageNo'])) {
@@ -50,33 +51,13 @@ tbody{
 <link rel="stylesheet" type="text/css" href="http://code.jquery.com/ui/1.10.1/themes/base/jquery-ui.css">
 <script type="text/javascript" src="http://code.jquery.com/jquery-1.9.1.js"></script>
 <script type="text/javascript" src="http://code.jquery.com/ui/1.10.1/jquery-ui.js"></script>
-<script type="text/javascript">
-  $(function() {
-  	$.datepicker.setDefaults({ dateFormat: 'yy-mm-dd' });
-    $( "#from" ).datepicker({
-      defaultDate: "+1w",
-      changeMonth: true,
-      numberOfMonths: 1,
-      onClose: function( selectedDate ) {
-        $( "#to" ).datepicker( "option", "minDate", selectedDate );
-      }
-    });
-    $( "#to" ).datepicker({
-      defaultDate: "+1w",
-      changeMonth: true,
-      numberOfMonths: 1,
-      onClose: function( selectedDate ) {
-        $( "#from" ).datepicker( "option", "maxDate", selectedDate );
-      }
-    });
-  });
-</script>
 <script>
 	$(function() {
 
 	  $( ".detele" ).click(function() {
-	  	var tid=$(this).parent().parent().children("td:eq(0)").html();
-	  	var url="print.php?delete="+tid;
+	  	var refundID=$(this).parent().parent().children("td:eq(0)").html();
+	  	var url="print.php?deleterefund="+refundID;
+	  	$.get(url);
 	  	$(this).html("已删除");
 
 	  });
@@ -91,13 +72,6 @@ tbody{
 		<div class="row">
 			<?php include 'leftside.html';?>
 			<div class="span18" style="border-width:thin;border:1px solid #dddddd; padding:10px;">
-				<!-- <form class="form-inline" action="print.php" method="post">
-					<label>退款编号</label>
-					<input type="text" class="span3" name="tid">
-					<label>创建时间</label>
-					<input type="text" class="span3" name="start_created" id="from" >
-					<input type="submit" value="查询" name="search">
-				</form> -->
 				<table class="table table-bordered table-condensed" style="margin-top: 10px;">
 					<colgroup>
 		                <col class="span2"></col>
@@ -118,6 +92,7 @@ tbody{
 					<tbody>
 						<?php
 							$result=$operatedb->Execsql("select * from refundlist where uID='".$uID."' limit ".$pagenum.",20",$conn);
+							// $per = (( $pageNo == $lastPage) ? $result_page[0][0]%20-1 : 19);
 							if ($pageNo<$lastPage) {
 								# code...
 								$per=19;

@@ -17,8 +17,8 @@
 		$result=$operatedb->Execsql("select * from user where uID=".$uID."",$conn);
 		if ($result==false) {
 			# code...
-			$arrUser=array('userID','uID','userName','userSessionkey','userAddress','userTel','userShopname');
-			$strUser=sprintf("insert into %s(%s) values (NULL,'%s','%s','%s','%s','%s','%s')",'user',implode(',', $arrUser),$uID,'',$sessionKey,'','','');
+			$arrUser=array('userID','uID','userName','userSessionkey','userAddress','userTel','userShopname','customExpress1','customExpress2','customExpress3');
+			$strUser=sprintf("insert into %s(%s) values (NULL,'%s','%s','%s','%s','%s','%s','%s','%s','%s')",'user',implode(',', $arrUser),$uID,'',$sessionKey,'','','','','','');
 			$result=$operatedb->Execsql($strUser,$conn);
 			if ($result==true) {
 				# code...
@@ -42,10 +42,24 @@
 				$req->setPageNo($_GET['pageNo']);
 			}
 			$resp = $c->execute($req, $sessionKey);
-			$total=$resp->total_results-1;
+			// $total=$resp->total_results-1;
+
+			$lastPage=ceil($resp->total_results/40);
+			if ($_GET['pageNo']<$lastPage) {
+								# code...
+				$total=39;
+			}elseif ($_GET['pageNo']==$lastPage) {
+				# code...
+				$total=$resp->total_results-($_GET['pageNo']-1)*40-1;
+			}
 
 			$result_first=$operatedb->Execsql("select * from orders where uID='".$uID."' limit 0,1",$conn);
-			$time=$result_first[0]['created'];
+			if ($result_first==true) {
+				# code...
+				$time=$result_first[0]['created'];
+			}else{
+				$time=date("Y-m-d H:i:s",time()-30*24*60*60);
+			}
 
 			$arrOrder=array('uID','tID','created','printStatus');
 			$j=0;
@@ -61,16 +75,6 @@
 				}else{
 					$j++;
 				}
-				// $result_select=$operatedb->Execsql("select * from orders where tID='".$tID."'",$conn);
-				// if ($result_select==true) {
-				// 	# code...
-				// 	$result_update=$operatedb->Execsql("update orders set created='".$created."' where tID='".$tID."'",$conn);
-				// 	$j++;
-				// }else{
-				// 	$strOrder=sprintf("insert into %s(%s) values ('%s','%s','%s','')",'orders',implode(',', $arrOrder),$uID,$tID,$created);
-				// 	$result_insert=$operatedb->Execsql($strOrder,$conn);
-				// 	$j++;
-				// }
 			}
 		}elseif ($_GET['type']=='refund') {
 			# code...
@@ -82,12 +86,21 @@
 				$req->setPageNo($_GET['pageNo']);
 			}
 			$resp = $c->execute($req, $sessionKey);
-			$total=$resp->total_results-1;
+			// $total=$resp->total_results-1;
+
+			$lastPage=ceil($resp->total_results/40);
+			if ($_GET['pageNo']<$lastPage) {
+								# code...
+				$total=39;
+			}elseif ($_GET['pageNo']==$lastPage) {
+				# code...
+				$total=$resp->total_results-($_GET['pageNo']-1)*40-1;
+			}
 
 			$result_first=$operatedb->Execsql("select * from refundlist where uID='".$uID."' limit 0,1 ",$conn);
 			$time=$result_first[0]['created'];
 
-			$arrRefund=array('refundID','uID','created');
+			$arrRefund=array('refundID','uID','created','mark','status');
 			$j=0;
 			while ($j <= $total) {
 				# code...
@@ -95,33 +108,31 @@
 				$created=$resp->refunds->refund[$j]->created;
 				if (date("Y-m-d H:i:s",strtotime($created))>date("Y-m-d H:i:s",strtotime($time))) {
 					# code...
-					$strRefund=sprintf("insert into refundlist (%s) values('%s','%s','%s')",implode(',', $arrRefund),$refundID,$uID,$created);
+					$strRefund=sprintf("insert into refundlist (%s) values('%s','%s','%s','备注','0')",implode(',', $arrRefund),$refundID,$uID,$created);
 					$result_insert=$operatedb->Execsql($strRefund,$conn);
 					$j++;
 				}else{
 					$j++;
 				}
-				// $result_select=$operatedb->Execsql("select * from refundlist where refundID='".$refundID."'",$conn);
-				// if ($result_select==true) {
-				// 	# code...
-				// 	$result_update=$operatedb->Execsql("update refundlist set created='".$created."' where refundID='".$refundID."'",$conn);
-				// 	$j++;
-				// }else{
-					// $strRefund=sprintf("insert into refundlist (%s) values('%s','%s','%s')",implode(',', $arrRefund),$refundID,$uID,$created);
-					// $result_insert=$operatedb->Execsql($strRefund,$conn);
-					// $j++;
-				// }
 			}
 		}elseif ($_GET['type']=='stock') {
 			# code...
-			$req = new ItemsInventoryGetRequest;
+			$req = new ItemsOnsaleGetRequest;
 			$req->setFields("num_iid,num,outer_id");
 			if (isset($_GET['pageNo'])&&!empty($_GET['pageNo'])) {
 				# code...
 				$req->setPageNo($_GET['pageNo']);
 			}
 			$resp = $c->execute($req, $sessionKey);
-			$total=$resp->total_results-1;
+			// $total=$resp->total_results-1;
+			$lastPage=ceil($resp->total_results/40);
+			if ($_GET['pageNo']<$lastPage) {
+								# code...
+				$total=39;
+			}elseif ($_GET['pageNo']==$lastPage) {
+				# code...
+				$total=$resp->total_results-($_GET['pageNo']-1)*40-1;
+			}
 
 			$arrStock=array('uID','numId','outerID','stock');
 			$j=0;
