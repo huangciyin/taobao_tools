@@ -56,6 +56,10 @@ $(function(){
 	$("#sendname").draggable();
 	$("#sendaddress").draggable();
 	$("#sendtel").draggable();
+	$("#sendshopname").draggable();
+	$("#custommark1").draggable();
+	$("#custommark2").draggable();
+	$("#custommark3").draggable();
 });
 </script>
 </head>
@@ -87,7 +91,7 @@ $(function(){
 		$result=$operatedb->Execsql("update stocklist set stock='".$_GET['stock']."' where numID='".$numID."'",$conn);
 	}elseif (isset($_GET['username'])&&!empty($_GET['username'])) {
 		# code...
-		$result=$operatedb->Execsql("update user set userName='".$_GET['username']."' , userTel='".$_GET['usertel']."' , userShopname='".$_GET['usershopname']."' , userAddress='".$_GET['useraddress']."' where uID='".$uID."'",$conn);
+		$result=$operatedb->Execsql("update user set userName='".$_GET['username']."' , userTel='".$_GET['usertel']."' , userShopname='".$_GET['usershopname']."' , userAddress='".$_GET['useraddress']."' , customMark1='".$_GET['usermark1']."' , customMark2='".$_GET['usermark2']."' , customMark3='".$_GET['usermark3']."' where uID='".$uID."'",$conn);
 	}elseif (isset($_GET['insertmark'])&&!empty($_GET['insertmark'])) {
 		# code...
 		$mark=$_GET['insertmark'];
@@ -122,6 +126,10 @@ $(function(){
 	<div id="sendname"><?php echo $sender[0]['userName'];?></div>
 	<div id="sendaddress"><?php echo $sender[0]['userAddress'];?></div>
 	<div id="sendtel"><?php echo $sender[0]['userTel'];?></div>
+	<div id="sendshopname"><?php echo $sender[0]['userShopname'];?></div>
+	<div id="custommark1"><?php echo $sender[0]['customMark1'];?></div>
+	<div id="custommark2"><?php echo $sender[0]['customMark2'];?></div>
+	<div id="custommark3"><?php echo $sender[0]['customMark3'];?></div>
 </div>
 <!-- <input type="submit" value="打印" id="print" onclick="print('sto.css')"> -->
 <input type="submit" value="打印" id="print" onclick="print('sto.css')">
