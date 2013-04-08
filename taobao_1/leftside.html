@@ -35,6 +35,9 @@
 	$userAddress=$result[0]['userAddress'];
 	$userTel=$result[0]['userTel'];
 	$userShopname=$result[0]['userShopname'];
+	$userMark1=$result[0]['customMark1'];
+	$userMark2=$result[0]['customMark2'];
+	$userMark3=$result[0]['customMark3'];
 ?>
 <table class="table table-bordered">
 	<tr>
@@ -43,7 +46,16 @@
 		<td colspan="2"><label>店名</label><input type="text" id="usershopname" value=<?php echo "\"".$userShopname."\"";?>></td>
 	</tr>
 	<tr>
-		<td colspan="6"><label>地址</label><input type="text" id="useraddress" style="width:500px;" value=<?php echo "\"".$userAddress."\"";?>><button id="insert">确定</button></td>
+		<td colspan="6"><label>地址</label><input type="text" id="useraddress" style="width:500px;" value=<?php echo "\"".$userAddress."\"";?>></td>
+	</tr>
+	<tr>
+		<td colspan="6"><label>自定义一</label><input type="text" id="usermark1" style="width:500px;" value=<?php echo "\"".$userMark1."\"";?>></td>
+	</tr>
+	<tr>
+		<td colspan="6"><label>自定义二</label><input type="text" id="usermark2" style="width:500px;" value=<?php echo "\"".$userMark2."\"";?>></td>
+	</tr>
+	<tr>
+		<td colspan="6"><label>自定义三</label><input type="text" id="usermark3" style="width:500px;" value=<?php echo "\"".$userMark3."\"";?>><button id="insert">确定</button></td>
 	</tr>
 </table>
 </div>
@@ -63,6 +75,10 @@
 		<div id="sendname">发件人姓名</div>
 		<div id="sendaddress">发件人地址</div>
 		<div id="sendtel">发件人电话</div>
+		<div id="sendshopname">店铺名称</div>
+		<div id="custommark1">自定义一</div>
+		<div id="custommark2">自定义二</div>
+		<div id="custommark3">自定义三</div>
 	</div>
 	<input type="submit" value="确定" id="updatecss" onclick="updatecss('customExpress1')">
 </div>
@@ -73,6 +89,10 @@ $("#mobile").draggable();
 $("#sendname").draggable();
 $("#sendaddress").draggable();
 $("#sendtel").draggable();
+$("#sendshopname").draggable();
+$("#custommark1").draggable();
+$("#custommark2").draggable();
+$("#custommark3").draggable();
 
 var url="readcss.php?customexpress1";
 $.get(url,function(result){
@@ -100,7 +120,10 @@ $(function(){
 		var usertel=$("#usertel").val();
 		var usershopname=$("#usershopname").val();
 		var useraddress=$("#useraddress").val();
-		var url="print.php?username="+username+"&usertel="+usertel+"&usershopname="+usershopname+"&useraddress="+useraddress;
+		var usermark1=$("#usermark1").val();
+		var usermark2=$("#usermark2").val();
+		var usermark3=$("#usermark3").val();
+		var url="print.php?username="+username+"&usertel="+usertel+"&usershopname="+usershopname+"&useraddress="+useraddress+"&usermark1="+usermark1+"&usermark2="+usermark2+"&usermark3="+usermark3;
 		$.get(url);
 		$("#dialog").dialog("close");
 	});
@@ -130,8 +153,16 @@ function updatecss(css)
 	var sendaddresstop=$("#sendaddress").css("top");
 	var sendtelleft=$("#sendtel").css("left");
 	var sendteltop=$("#sendtel").css("top");
+	var sendshopnameleft=$("#sendshopname").css("left");
+	var sendshopnametop=$("#sendshopname").css("top");
+	var custommark1left=$("#custommark1").css("left");
+	var custommark1top=$("#custommark1").css("top");
+	var custommark2left=$("#custommark2").css("left");
+	var custommark2top=$("#custommark2").css("top");
+	var custommark3left=$("#custommark3").css("left");
+	var custommark3top=$("#custommark3").css("top");
 
-	var customexpress=nameleft+nametop+addressleft+addresstop+mobileleft+mobiletop+sendnameleft+sendnametop+sendaddressleft+sendaddresstop+sendtelleft+sendteltop;
+	var customexpress=nameleft+nametop+addressleft+addresstop+mobileleft+mobiletop+sendnameleft+sendnametop+sendaddressleft+sendaddresstop+sendtelleft+sendteltop+sendshopnameleft+sendshopnametop+custommark1left+custommark1top+custommark2left+custommark2top+custommark3left+custommark3top;
 
 	 var cssurl="print.php?css="+css+"&customexpress="+customexpress;
 	 $.get(cssurl);
@@ -149,6 +180,10 @@ function customexpress1()
 	$("#sendname").css({"left":arr1[6],"top":arr1[7]});
 	$("#sendaddress").css({"left":arr1[8],"top":arr1[9]});
 	$("#sendtel").css({"left":arr1[10],"top":arr1[11]});
+	$("#sendshopname").css({"left":arr1[12],"top":arr1[13]});
+	$("#custommark1").css({"left":arr1[14],"top":arr1[15]});
+	$("#custommark2").css({"left":arr1[16],"top":arr1[17]});
+	$("#custommark3").css({"left":arr1[18],"top":arr1[19]});
 });
 }
 function customexpress2()
@@ -163,6 +198,10 @@ function customexpress2()
 	$("#sendname").css({"left":arr2[6],"top":arr2[7]});
 	$("#sendaddress").css({"left":arr2[8],"top":arr2[9]});
 	$("#sendtel").css({"left":arr2[10],"top":arr2[11]});
+	$("#sendshopname").css({"left":arr2[12],"top":arr2[13]});
+	$("#custommark1").css({"left":arr2[14],"top":arr2[15]});
+	$("#custommark2").css({"left":arr2[16],"top":arr2[17]});
+	$("#custommark3").css({"left":arr2[18],"top":arr2[19]});
 });
 }
 function customexpress3()
@@ -177,6 +216,10 @@ function customexpress3()
 	$("#sendname").css({"left":arr3[6],"top":arr3[7]});
 	$("#sendaddress").css({"left":arr3[8],"top":arr3[9]});
 	$("#sendtel").css({"left":arr3[10],"top":arr3[11]});
+	$("#sendshopname").css({"left":arr3[12],"top":arr3[13]});
+	$("#custommark1").css({"left":arr3[14],"top":arr3[15]});
+	$("#custommark2").css({"left":arr3[16],"top":arr3[17]});
+	$("#custommark3").css({"left":arr3[18],"top":arr3[19]});
 });
 }
 </script>
