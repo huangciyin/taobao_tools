@@ -85,6 +85,27 @@ tbody{
 
 	    $( "#dialog" ).dialog( "open" );
 	  });
+  
+	});
+</script>
+<script type="text/javascript">
+$(function(){
+	$( "#searchdialog" ).dialog({
+		  	autoOpen:false,
+		  	width:620
+		  });
+
+	$( "#search" ).click(function(){
+		  	var content=$("input#content").val();
+		  	var url="search.php?search="+content;
+
+		  	$.get(url,function(result1){
+		  		$("#searchdialog").html(result1);
+		  	});
+
+		  	$( "#searchdialog" ).dialog( "open" );
+
+		  });
 	});
 </script>
 </head>
@@ -96,30 +117,10 @@ tbody{
 		<div class="row">
 			<?php include 'leftside.html';?>
 			<div class="span18" style="border-width:thin;border:1px solid #dddddd; padding:10px;">
-				<form class="form-inline" action="index.php" method="post">
-					<label>交易编号</label>
-					<input type="text" class="span3" name="tid" >
-					<label>收件人姓名</label>
-					<input type="text" class="span3" name="receiver_name" >
-					<label>创建时间</label>
-					<input type="text" class="span3" name="start_created" id="from" >
-					<label>订单状态</label>
-						<select name="status">
-							<option value="CREATED">订单已创建</option>
-							<option value="RECREATED">订单重新创建</option>
-							<option value="CANCELLED">订单已取消</option>
-							<option value="CLOSED">订单关闭</option>
-							<option value="SENDING">等候发送给物流公司</option>
-							<option value="ACCEPTING">已发送给物流公司,等待接单</option>
-							<option value="ACCEPTED">物流公司已接单</option>
-							<option value="REJECTED">物流公司不接单</option>
-							<option value="PICK_UP">物流公司揽收成功</option>
-							<option value="PICK_UP_FAILED">物流公司揽收失败</option>
-							<option value="LOST">物流公司丢单</option>
-							<option value="REJECTED_BY_RECEIVER">对方拒签</option>
-							<option value="ACCEPTED_BY_RECEIVER">对方已签收</option>
-						</select>
-					<input type="submit" value="查询" name="search">
+				<form class="form-inline" method="post">
+					<label>查询</label>
+					<input type="text" class="span6" id="content" >
+					<a href="javascript:;" id="search">查询</a>
 				</form>
 				<table class="table table-bordered table-condensed" style="margin-top: 10px;">
 					<colgroup>
@@ -186,5 +187,6 @@ tbody{
  ?>
 </div>
 <div id="dialog" title="订单详情"></div>
+<div id="searchdialog" title="查询结果"></div>
 </body>
 </html>
