@@ -17,8 +17,8 @@
 		$result=$operatedb->Execsql("select * from user where uID=".$uID."",$conn);
 		if ($result==false) {
 			# code...
-			$arrUser=array('userID','uID','userName','userSessionkey','userAddress','userTel','userShopname','customExpress1','customExpress2','customExpress3');
-			$strUser=sprintf("insert into %s(%s) values (NULL,'%s','%s','%s','%s','%s','%s','%s','%s','%s')",'user',implode(',', $arrUser),$uID,'',$sessionKey,'','','','','','');
+			$arrUser=array('userID','uID','userName','userSessionkey','userAddress','userTel','userShopname','customExpress1','customExpress2','customExpress3','customMark1','customMark2','customMark3');
+			$strUser=sprintf("insert into %s(%s) values (NULL,'%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s')",'user',implode(',', $arrUser),$uID,'',$sessionKey,'','','','','','','','','');
 			$result=$operatedb->Execsql($strUser,$conn);
 			if ($result==true) {
 				# code...
@@ -53,7 +53,7 @@
 				$total=$resp->total_results-($_GET['pageNo']-1)*40-1;
 			}
 
-			$result_first=$operatedb->Execsql("select * from orders where uID='".$uID."' limit 0,1",$conn);
+			$result_first=$operatedb->Execsql("select * from orders where uID='".$uID."' order by created DESC limit 0,1",$conn);
 			if ($result_first==true) {
 				# code...
 				$time=$result_first[0]['created'];
