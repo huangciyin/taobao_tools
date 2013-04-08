@@ -41,24 +41,18 @@ label{
 </style>
 </head>
 <body>
-	<div class="container">
-		<div class="row">
-			<div class="span12">
-				<table class="table table-bordered">
-					<tr>
-						<td colspan="2"><label>交易编号:</label><?php echo $tID;?></td>
-						<td colspan="2"><label>提交时间:</label><?php echo $created;?></td>
-						<td colspan="2"><label>收件人姓名:</label><?php echo $receiverName;?></td>
-					</tr>
-					<tr><td colspan="6"><label>收件人地址:</label><?php echo $receicerLocation;?></td></tr>
-					<tr><td colspan="6"><label>物品详情:</label><?php echo $goods;?></td></tr>
-					<tr>
-						<td colspan="3"><label>金额:</label><?php echo $total_fee;?></td>
-						<td colspan="3"><label>操作:</label></td>
-					</tr>
-				</table>
-			</div>
-		</div>	
-	</div>
+	<table class="table table-bordered">
+		<tr>
+			<td colspan="2"><label>交易编号:</label><?php echo $tID;?></td>
+			<td colspan="2"><label>提交时间:</label><?php echo $created;?></td>
+			<td colspan="2"><label>收件人姓名:</label><?php echo $receiverName;?></td>
+		</tr>
+		<tr><td colspan="6"><label>收件人地址:</label><?php echo $receicerLocation;?></td></tr>
+		<tr><td colspan="6"><label>物品详情:</label><?php echo $goods;?></td></tr>
+		<tr>
+			<td colspan="3"><label>金额:</label><?php echo $total_fee;?></td>
+			<td colspan="3"><label>操作:</label></td>
+		</tr>
+	</table>
 </body>
 </html>
