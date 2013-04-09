@@ -109,6 +109,15 @@ $(function(){
 	}elseif (isset($_GET['deleterefund'])&&!empty($_GET['deleterefund'])) {
 		# code...
 		$result=$operatedb->Execsql("delete from refundlist where refundID='".$_GET['deleterefund']."'",$conn);
+	}elseif (isset($_GET['addaftersale'])&&!empty($_GET['addaftersale'])) {
+		# code...
+		$result=$operatedb->Execsql("insert into aftersale values ('','".$uID."','".$_GET['addaftersale']."','')",$conn);
+	}elseif (isset($_GET['deleteaftersale'])&&!empty($_GET['deleteaftersale'])) {
+		# code...
+		$result=$operatedb->Execsql("delete from aftersale where uID='".$uID."' and title='".$_GET['deleteaftersale']."'",$conn);
+	}elseif (isset($_GET['addmark'])&&!empty($_GET['addmark'])) {
+		# code...
+		$result=$operatedb->Execsql("update aftersale set mark=CONCAT(mark,'mark".$_GET['addmark']."') where uID='".$uID."' and title='".$_GET['title']."'",$conn);
 	}
 	
 ?>
