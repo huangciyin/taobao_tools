@@ -118,8 +118,8 @@ $(function(){
 			<?php include 'leftside.html';?>
 			<div class="span18" style="border-width:thin;border:1px solid #dddddd; padding:10px;">
 				<form class="form-inline" method="post">
-					<label>查询</label>
-					<input type="text" class="span6" id="content" >
+					<label>查询条件</label>
+					<input type="text" class="span6" id="content" placeholder="姓名 手机号码 收货地址 交易编号" >
 					<a href="javascript:;" id="search">查询</a>
 				</form>
 				<table class="table table-bordered table-condensed" style="margin-top: 10px;">
