@@ -48,27 +48,6 @@ tbody{
 <link rel="stylesheet" type="text/css" href="http://code.jquery.com/ui/1.10.1/themes/base/jquery-ui.css">
 <script type="text/javascript" src="http://code.jquery.com/jquery-1.9.1.js"></script>
 <script type="text/javascript" src="http://code.jquery.com/ui/1.10.1/jquery-ui.js"></script>
-<script type="text/javascript">
-  $(function() {
-  	$.datepicker.setDefaults({ dateFormat: 'yy-mm-dd' });
-    $( "#from" ).datepicker({
-      defaultDate: "+1w",
-      changeMonth: true,
-      numberOfMonths: 1,
-      onClose: function( selectedDate ) {
-        $( "#to" ).datepicker( "option", "minDate", selectedDate );
-      }
-    });
-    $( "#to" ).datepicker({
-      defaultDate: "+1w",
-      changeMonth: true,
-      numberOfMonths: 1,
-      onClose: function( selectedDate ) {
-        $( "#from" ).datepicker( "option", "maxDate", selectedDate );
-      }
-    });
-  });
-</script>
 <script>
 	$(function() {
 
@@ -89,15 +68,6 @@ tbody{
 		<div class="row">
 			<?php include 'leftside.html';?>
 			<div class="span18" style="border-width:thin;border:1px solid #dddddd; padding:10px;">
-				<!-- <form class="form-inline" action="print.php" method="post">
-					<label>交易编号</label>
-					<input type="text" class="span3" name="tid">
-					<label>收件人姓名</label>
-					<input type="text" class="span3" name="receiver_name" >
-					<label>创建时间</label>
-					<input type="text" class="span3" name="start_created" id="from" >
-					<input type="submit" value="查询" name="search">
-				</form> -->
 				<table class="table table-bordered table-condensed" style="margin-top: 7px;">
 					<colgroup>
 		                <col class="span2"></col>
