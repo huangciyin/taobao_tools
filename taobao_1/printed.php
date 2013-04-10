@@ -113,6 +113,9 @@ tbody{
 							}elseif ($pageNo==$lastPage) {
 								# code...
 								$per=$result_page[0][0]-($pageNo-1)*20-1;
+							}elseif ($lastPage==0) {
+								# code...
+								$per=-1;
 							}
 							$i=0;
 							while ($i <= $per) {
