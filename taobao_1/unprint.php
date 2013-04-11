@@ -12,8 +12,6 @@
 	}
 	$pagenum=($pageNo-1)*20;
 	$lastPage=ceil($result_page[0][0]/20);
-
-
 ?>
 <html>
 <head>
@@ -83,7 +81,7 @@ tbody{
 					<tbody>
 						<?php
 							$result=$operatedb->Execsql("select * from orders where uID='".$uID."' and printStatus='' limit ".$pagenum.",20",$conn);
-							// $per = (( $pageNo == $lastPage) ? $result_page[0][0]%20-1 : 19);
+							
 							if ($pageNo<$lastPage) {
 								# code...
 								$per=19;

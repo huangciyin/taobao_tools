@@ -34,27 +34,6 @@ tbody{
 <link rel="stylesheet" type="text/css" href="http://code.jquery.com/ui/1.10.1/themes/base/jquery-ui.css">
 <script type="text/javascript" src="http://code.jquery.com/jquery-1.9.1.js"></script>
 <script type="text/javascript" src="http://code.jquery.com/ui/1.10.1/jquery-ui.js"></script>
-<script type="text/javascript">
-  $(function() {
-  	$.datepicker.setDefaults({ dateFormat: 'yy-mm-dd' });
-    $( "#from" ).datepicker({
-      defaultDate: "+1w",
-      changeMonth: true,
-      numberOfMonths: 1,
-      onClose: function( selectedDate ) {
-        $( "#to" ).datepicker( "option", "minDate", selectedDate );
-      }
-    });
-    $( "#to" ).datepicker({
-      defaultDate: "+1w",
-      changeMonth: true,
-      numberOfMonths: 1,
-      onClose: function( selectedDate ) {
-        $( "#from" ).datepicker( "option", "maxDate", selectedDate );
-      }
-    });
-  });
-</script>
 <script>
 	$(function() {
 	  $( "#dialog" ).dialog({
@@ -128,11 +107,8 @@ $(function(){
 					</thead>
 					<tbody>
 						<?php
-
 							$result=$operatedb->Execsql("select * from orders where uID='".$uID."' limit ".$itemNum.",20",$conn);
 
-							// $per = (( $pageNo == $lastPage) ? $result_page[0][0]%20-1 : 19);
-							 
 							if ($pageNo<$lastPage) {
 								# code...
 								$per=19;

@@ -4,16 +4,6 @@
 	require_once 'config.php';
 
 
-	// $c=new TopClient;
-	// $c->appkey=$appkey;
-	// $c->secretKey=$secretKey;
-	// $c->format=$format;
-
-	// $user_req = new UserSellerGetRequest;
-	// $user_req->setFields("user_id");
-	// $user_resp = $c->execute($user_req, $sessionKey);
-	// $uID=$user_resp->user->user_id;
-
 	$req = new TradeFullinfoGetRequest;
 	$req->setFields("created,num_iid,receiver_name,receiver_state,receiver_city,receiver_district,receiver_address,receiver_mobile,total_fee,orders.title,orders.num");
 	if (isset($_GET['tid'])&&!empty($_GET['tid'])) {
@@ -44,9 +34,7 @@
 		newwin.print();
 		newwin.close();
 		
-
 	}
-
 </script>
 <script type="text/javascript">
 $(function(){
@@ -140,7 +128,6 @@ $(function(){
 	<div id="custommark2"><?php echo $sender[0]['customMark2'];?></div>
 	<div id="custommark3"><?php echo $sender[0]['customMark3'];?></div>
 </div>
-<!-- <input type="submit" value="打印" id="print" onclick="print('sto.css')"> -->
 <input type="submit" value="打印" id="print" onclick="print('sto.css')">
 <script type="text/javascript">
  	function sto()
