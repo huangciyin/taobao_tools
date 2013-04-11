@@ -2,10 +2,6 @@
 	header("Content-type:text/html;charset=utf-8");
 	require_once 'config.php';
 
-	$c=new TopClient;
-	$c->appkey="1021409528";
-	$c->secretKey="sandbox31b961e472f864b1c17ebd4ba";
-	$c->format="json";
 
 	$req = new TradeFullinfoGetRequest;
 	$req->setFields("created,receiver_name,receiver_state,receiver_city,receiver_district,receiver_address,receiver_mobile,total_fee,orders.title,orders.num");

@@ -4,15 +4,15 @@
 	require_once 'config.php';
 
 
-	$c=new TopClient;
-	$c->appkey="1021409528";
-	$c->secretKey="sandbox31b961e472f864b1c17ebd4ba";
-	$c->format="json";
+	// $c=new TopClient;
+	// $c->appkey=$appkey;
+	// $c->secretKey=$secretKey;
+	// $c->format=$format;
 
-	$user_req = new UserSellerGetRequest;
-	$user_req->setFields("user_id");
-	$user_resp = $c->execute($user_req, $sessionKey);
-	$uID=$user_resp->user->user_id;
+	// $user_req = new UserSellerGetRequest;
+	// $user_req->setFields("user_id");
+	// $user_resp = $c->execute($user_req, $sessionKey);
+	// $uID=$user_resp->user->user_id;
 
 	$req = new TradeFullinfoGetRequest;
 	$req->setFields("created,num_iid,receiver_name,receiver_state,receiver_city,receiver_district,receiver_address,receiver_mobile,total_fee,orders.title,orders.num");

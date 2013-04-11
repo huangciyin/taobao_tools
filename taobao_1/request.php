@@ -1,12 +1,12 @@
 <?php	
 	function getData($type){
 		require_once 'config.php';
-		global $sessionKey;
+		global $sessionKey,$appkey,$secretKey,$format;
 
 		$c=new TopClient;
-		$c->appkey="1021409528";
-		$c->secretKey="sandbox31b961e472f864b1c17ebd4ba";
-		$c->format="json";
+		$c->appkey=$appkey;
+		$c->secretKey=$secretKey;
+		$c->format=$format;
 
 		if (isset($type)&&!empty($type)) {
 				# code...
