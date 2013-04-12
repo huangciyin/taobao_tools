@@ -1,0 +1,60 @@
+#name{
+	height: 20px;
+	width: 80px;
+	border: 1px solid red;
+	position: relative;
+}
+#address{
+	height: 50px;
+	width: 250px;
+	border: 1px solid red;
+	position: relative;
+}
+#mobile{
+	height: 20px;
+	width: 100px;
+	border: 1px solid red;
+	position: relative;
+}
+#sendname{
+	height: 20px;
+	width: 80px;
+	border: 1px solid red;
+	position: relative;
+}
+#sendtel{
+	height: 20px;
+	width: 100px;
+	border: 1px solid red;
+	position: relative;
+}
+#sendaddress{
+	height: 50px;
+	width: 250px;
+	border: 1px solid red;
+	position: relative;
+}
+#sendshopname{
+	height: 20px;
+	width: 200px;
+	border: 1px solid red;
+	position: relative;
+}
+#custommark1{
+	height: 50px;
+	width: 250px;
+	border: 1px solid red;
+	position: relative;
+}
+#custommark2{
+	height: 50px;
+	width: 250px;
+	border: 1px solid red;
+	position: relative;
+}
+#custommark3{
+	height: 50px;
+	width: 250px;
+	border: 1px solid red;
+	position: relative;
+}
