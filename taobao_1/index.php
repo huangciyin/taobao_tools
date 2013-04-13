@@ -78,7 +78,7 @@ $(function(){
 <body>
 	<div class="container">
 		<div class="row">
-			<div style="height:100px;"></div>
+			<div style="height:100px;"><?php include 'top.html';?></div>
 		</div>
 		<div class="row">
 			<?php include 'leftside.html';?>

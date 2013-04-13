@@ -64,18 +64,20 @@ tbody{
 				<table class="table table-bordered table-condensed" style="margin-top: 10px;">
 					<colgroup>
 		                <col class="span2"></col>
-		                <col class="span2"></col>
-		                <col class="span5"></col>
+		                <col class="span1"></col>
+		                <col class="span4"></col>
+						<col class="span1"></col>
 						<col class="span2"></col>
-						<col class="span2"></col>
+						<col class="span4"></col>
             		</colgroup>
 					<thead>
 						<tr>
 							<th>交易编号</th>
-							<th>收件人姓名</th>
-							<th>收件人地址</th>
-							<th>收件人电话</th>
+							<th>姓名</th>
+							<th>地址</th>
+							<th>电话</th>
 							<th>操作</th>
+							<th>商品</th>
 						</tr>
 					</thead>
 					<tbody>
@@ -98,13 +100,22 @@ tbody{
 								echo "<tr>";
 								echo "<td>".$result[$i]['tID']."</td>";
 								$req=new TradeFullinfoGetRequest;
-								$req->setFields("receiver_name,receiver_state,receiver_city,receiver_district,receiver_address,receiver_mobile");
+								$req->setFields("receiver_name,receiver_state,receiver_city,receiver_district,receiver_address,receiver_mobile,orders.title,orders.num");
 								$req->setTid($result[$i]['tID']);
 								$resp=$c->execute($req,$sessionKey);
 								echo "<td>".$resp->trade->receiver_name."</td>";
 								echo "<td>".$resp->trade->receiver_state.$resp->trade->receiver_city.$resp->trade->receiver_district.$resp->trade->receiver_address."</td>";
 								echo "<td>".$resp->trade->receiver_mobile."</td>";
 								echo "<td><a href=\"javascript:void(0);\" class=\"opener\">打印快递单</a></td>";
+								$goodscount=count($resp->trade->orders->order)-1;
+								$m=0;
+								while ($m <= $goodscount) {
+									# code...
+									@$goods.=$resp->trade->orders->order[$m]->title." X ".$resp->trade->orders->order[$m]->num;
+									$m++;
+								}
+								echo "<td>".$goods."</td>";
+								$goods="";
 								echo "</tr>";
 								$i++;
 							}

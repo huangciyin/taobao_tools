@@ -41,10 +41,10 @@ tbody{
 	$(function() {
 
 	  $( ".detele" ).click(function() {
-	  	var refundID=$(this).parent().parent().children("td:eq(0)").html();
-	  	var url="print.php?deleterefund="+refundID;
-	  	$.get(url);
-	  	$(this).html("已删除");
+	  	// var refundID=$(this).parent().parent().children("td:eq(0)").html();
+	  	// var url="print.php?deleterefund="+refundID;
+	  	// $.get(url);
+	  	// $(this).html("已删除");
 
 	  });
 	});
@@ -101,7 +101,7 @@ tbody{
 								echo "<td>".$resp->refund->title."</td>";
 								echo "<td>".$resp->refund->reason."</td>";
 								echo "<td>".$resp->refund->created."</td>";
-								echo "<td><a href=\"javascript:void(0);\" class=\"detele\">删除记录</a></td>";
+								echo "<td><a href=\"http://mai.taobao.com\" class=\"detele\" target=\"_blank\">进入淘宝处理</a></td>";
 								echo "</tr>";
 								$i++;
 							}

@@ -1,0 +1,48 @@
+<?php
+	$req = new TraderatesGetRequest;
+	$req->setFields("tid");
+	$req->setRateType("get");
+	$req->setRole("buyer");
+	$req->setResult("neutral");
+	$resp = $c->execute($req, $sessionKey);
+	$neutral=$resp->total_results;
+	$req->setResult("bad");
+	$resp1 = $c->execute($req, $sessionKey);
+	$bad=$resp1->total_results;
+
+	$unprint=$operatedb->Execsql("select count(*) from orders where uID='".$uID."' and printStatus=''",$conn);
+	$refund=$operatedb->Execsql("select count(*) from refundlist where uID='".$uID."'",$conn);
+	$stock=$operatedb->Execsql("select count(*) from stocklist where uID='".$uID."' and stock<5",$conn);
+?>
+<div style="border-width:thin;border:1px solid #dddddd;background-color:#f2f8fa;margin-left:60px;height:100px; width:1112px;">
+	<div id="id1"></div>
+	<div id="id2">
+		<div id="id3"></div>
+		<div id="id4">评价=====中评:<?php echo $neutral;?>;差评:<?php echo $bad;?></div>
+		<div id="id4">未打印订单=<?php echo $unprint[0][0];?></div>
+		<div id="id4">售后=<?php echo $refund[0][0];?></div>
+		<div id="id4">补货=<?php echo $stock[0][0];?></div>
+		<div id="id3"></div>
+	</div>
+	<div id="id1"></div>
+</div>
+<style type="text/css">
+#id1{
+	width: 1112px;
+	height: 20px;
+}
+#id2{
+	width: 1112px;
+	height: 60px;
+}
+#id3{
+	width: 200px;
+	height: 60px;
+	float: left;
+}
+#id4{
+	width: 178px;
+	height: 60px;
+	float: left;
+}
+</style>
