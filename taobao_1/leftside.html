@@ -80,6 +80,7 @@
 		<div id="custommark1">自定义一</div>
 		<div id="custommark2">自定义二</div>
 		<div id="custommark3">自定义三</div>
+		<div id="goodslist">产品列表</div>
 	</div>
 	<input type="submit" value="确定" id="updatecss" onclick="updatecss('customExpress1')">
 </div>
@@ -94,6 +95,7 @@ $("#sendshopname").draggable();
 $("#custommark1").draggable();
 $("#custommark2").draggable();
 $("#custommark3").draggable();
+$("#goodslist").draggable();
 
 var url="readcss.php?customexpress1";
 $.get(url,function(result){
@@ -104,6 +106,11 @@ $.get(url,function(result){
 	$("#sendname").css({"left":arr1[6],"top":arr1[7]});
 	$("#sendaddress").css({"left":arr1[8],"top":arr1[9]});
 	$("#sendtel").css({"left":arr1[10],"top":arr1[11]});
+	$("#sendshopname").css({"left":arr1[12],"top":arr1[13]});
+	$("#custommark1").css({"left":arr1[14],"top":arr1[15]});
+	$("#custommark2").css({"left":arr1[16],"top":arr1[17]});
+	$("#custommark3").css({"left":arr1[18],"top":arr1[19]});
+	$("#goodslist").css({"left":arr1[20],"top":arr1[21]});
 });
 
 
@@ -162,8 +169,10 @@ function updatecss(css)
 	var custommark2top=$("#custommark2").css("top");
 	var custommark3left=$("#custommark3").css("left");
 	var custommark3top=$("#custommark3").css("top");
+	var goodslistleft=$("#goodslist").css("left");
+	var goodslisttop=$("#goodslist").css("top");
 
-	var customexpress=nameleft+nametop+addressleft+addresstop+mobileleft+mobiletop+sendnameleft+sendnametop+sendaddressleft+sendaddresstop+sendtelleft+sendteltop+sendshopnameleft+sendshopnametop+custommark1left+custommark1top+custommark2left+custommark2top+custommark3left+custommark3top;
+	var customexpress=nameleft+nametop+addressleft+addresstop+mobileleft+mobiletop+sendnameleft+sendnametop+sendaddressleft+sendaddresstop+sendtelleft+sendteltop+sendshopnameleft+sendshopnametop+custommark1left+custommark1top+custommark2left+custommark2top+custommark3left+custommark3top+goodslistleft+goodslisttop;
 
 	 var cssurl="print.php?css="+css+"&customexpress="+customexpress;
 	 $.get(cssurl);
@@ -185,6 +194,7 @@ function customexpress1()
 	$("#custommark1").css({"left":arr1[14],"top":arr1[15]});
 	$("#custommark2").css({"left":arr1[16],"top":arr1[17]});
 	$("#custommark3").css({"left":arr1[18],"top":arr1[19]});
+	$("#goodslist").css({"left":arr1[20],"top":arr1[21]});
 });
 }
 function customexpress2()
@@ -203,6 +213,7 @@ function customexpress2()
 	$("#custommark1").css({"left":arr2[14],"top":arr2[15]});
 	$("#custommark2").css({"left":arr2[16],"top":arr2[17]});
 	$("#custommark3").css({"left":arr2[18],"top":arr2[19]});
+	$("#goodslist").css({"left":arr2[20],"top":arr2[21]});
 });
 }
 function customexpress3()
@@ -221,6 +232,7 @@ function customexpress3()
 	$("#custommark1").css({"left":arr3[14],"top":arr3[15]});
 	$("#custommark2").css({"left":arr3[16],"top":arr3[17]});
 	$("#custommark3").css({"left":arr3[18],"top":arr3[19]});
+	$("#goodslist").css({"left":arr3[20],"top":arr3[21]});
 });
 }
 </script>

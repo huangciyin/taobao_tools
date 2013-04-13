@@ -209,6 +209,14 @@ label{
 					$n++;
 				}
 
+				$select=$operatedb->Execsql("select * from aftersale where title='".$arr[$m]."'",$conn);
+				if ($select==true) {
+					# code...
+					$result_show="<a  href=\"javascript:;\">已添加至线下售后</a>";
+				}else{
+					$result_show="<a class=\"aftersale\" href=\"javascript:;\">线下售后</a>";
+				}
+
 				echo "<tr>".
 						"<td colspan=\"2\"><label>交易编号:</label>".$arr[$m]."</td>".
 						"<td colspan=\"2\"><label>提交时间:</label>".$created."</td>".
@@ -218,12 +226,23 @@ label{
 					"<tr><td colspan=\"6\"><label>物品详情:</label>".$goods."</td></tr>".
 					"<tr>".
 						"<td colspan=\"3\"><label>金额:</label>".$total_fee."</td>".
-						"<td colspan=\"3\"><label>操作:</label></td>".
+						"<td colspan=\"3\"><label>操作:</label>".$result_show."</td>".
 					"</tr>".
 					"<br>";
 				$m++;
 			}
 		?>
 	</table>
+<script type="text/javascript">
+$(function(){
+	$(".aftersale").click(function(){
+		var tID=$(this).parents().prev().prev().prev().children("td:eq(0)").html().split('</label>');
+		// alert(tID[1]);
+		var url="print.php?addaftersale="+tID[1];
+		$(this).text("已添加至线下售后");
+		$.get(url);
+	});
+});
+</script>
 </body>
 </html>

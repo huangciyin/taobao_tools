@@ -48,6 +48,7 @@ $(function(){
 	$("#custommark1").draggable();
 	$("#custommark2").draggable();
 	$("#custommark3").draggable();
+	$("#goodslist").draggable();
 });
 </script>
 </head>
@@ -127,6 +128,17 @@ $(function(){
 	<div id="custommark1"><?php echo $sender[0]['customMark1'];?></div>
 	<div id="custommark2"><?php echo $sender[0]['customMark2'];?></div>
 	<div id="custommark3"><?php echo $sender[0]['customMark3'];?></div>
+	<div id="goodslist">
+	<?php
+		$goodscount=count($resp->trade->orders->order)-1;
+		$i=0;
+		while ($i <= $goodscount) {
+			# code...
+			@$goods.=$resp->trade->orders->order[$i]->title." X ".$resp->trade->orders->order[$i]->num;
+			$i++;
+		}
+		echo $goods;
+	?></div>
 </div>
 <input type="submit" value="打印" id="print" onclick="print('sto.css')">
 <script type="text/javascript">
@@ -138,6 +150,7 @@ $(function(){
 		$("#sendname").attr('style','');
 		$("#sendaddress").attr('style','');
 		$("#sendtel").attr('style','');
+		$("#goodslist").attr('style','');
 
  		$("#img").attr('style','background-image:url(source/sto.PNG);height:500px; width:910px;');
  		$("#style").attr('href','css/express/sto.css');
@@ -152,6 +165,7 @@ $(function(){
 		$("#sendname").attr('style','');
 		$("#sendaddress").attr('style','');
 		$("#sendtel").attr('style','');
+		$("#goodslist").attr('style','');
 
  		$("#img").attr('style','background-image:url(source/yunda.PNG);height:500px; width:910px;');
  		$("#style").attr('href','css/express/yunda.css');
@@ -171,6 +185,11 @@ $(function(){
 			$("#sendname").css({"left":arr1[6],"top":arr1[7]});
 			$("#sendaddress").css({"left":arr1[8],"top":arr1[9]});
 			$("#sendtel").css({"left":arr1[10],"top":arr1[11]});
+			$("#sendshopname").css({"left":arr1[12],"top":arr1[13]});
+			$("#custommark1").css({"left":arr1[14],"top":arr1[15]});
+			$("#custommark2").css({"left":arr1[16],"top":arr1[17]});
+			$("#custommark3").css({"left":arr1[18],"top":arr1[19]});
+			$("#goodslist").css({"left":arr1[20],"top":arr1[21]});
 		});
 		// $("#print").attr('onclick','print(\'customexpress1\')');
 
@@ -189,6 +208,11 @@ $(function(){
 			$("#sendname").css({"left":arr2[6],"top":arr2[7]});
 			$("#sendaddress").css({"left":arr2[8],"top":arr2[9]});
 			$("#sendtel").css({"left":arr2[10],"top":arr2[11]});
+			$("#sendshopname").css({"left":arr2[12],"top":arr2[13]});
+			$("#custommark1").css({"left":arr2[14],"top":arr2[15]});
+			$("#custommark2").css({"left":arr2[16],"top":arr2[17]});
+			$("#custommark3").css({"left":arr2[18],"top":arr2[19]});
+			$("#goodslist").css({"left":arr2[20],"top":arr2[21]});
 		});
 		// $("#print").attr('onclick','print(\'customexpress2\')');
 	}
@@ -206,6 +230,11 @@ $(function(){
 			$("#sendname").css({"left":arr3[6],"top":arr3[7]});
 			$("#sendaddress").css({"left":arr3[8],"top":arr3[9]});
 			$("#sendtel").css({"left":arr3[10],"top":arr3[11]});
+			$("#sendshopname").css({"left":arr3[12],"top":arr3[13]});
+			$("#custommark1").css({"left":arr3[14],"top":arr3[15]});
+			$("#custommark2").css({"left":arr3[16],"top":arr3[17]});
+			$("#custommark3").css({"left":arr3[18],"top":arr3[19]});
+			$("#goodslist").css({"left":arr3[20],"top":arr3[21]});
 		});
 		// $("#print").attr('onclick','print(\'customexpress3\')');
 	}

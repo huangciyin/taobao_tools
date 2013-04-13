@@ -90,19 +90,23 @@ $(function(){
 				</form>
 				<table class="table table-bordered table-condensed" style="margin-top: 10px;">
 					<colgroup>
-		                <col class="span2"></col>
-		                <col class="span2"></col>
-		                <col class="span5"></col>
+		                <col class="span1"></col>
+		                <col class="span1"></col>
+		                <col class="span4"></col>
+						<col class="span2"></col>
+						<col class="span2"></col>
 						<col class="span2"></col>
 						<col class="span2"></col>
             		</colgroup>
 					<thead>
 						<tr>
 							<th>交易编号</th>
-							<th>收件人姓名</th>
-							<th>收件人地址</th>
-							<th>收件人电话</th>
+							<th>姓名</th>
+							<th>地址</th>
+							<th>电话</th>
 							<th>订单状态</th>
+							<th>买家备注</th>
+							<th>卖家备注</th>
 						</tr>
 					</thead>
 					<tbody>
@@ -125,13 +129,15 @@ $(function(){
 								echo "<tr>";
 								echo "<td><a href=\"javascript:void(0);\" class=\"opener\">".$result[$i]['tID']."</a></td>";
 								$req = new TradeFullinfoGetRequest;
-								$req->setFields("status,receiver_name,receiver_state,receiver_city,receiver_district,receiver_address,receiver_mobile,orders.title");
+								$req->setFields("status,receiver_name,receiver_state,receiver_city,receiver_district,receiver_address,receiver_mobile,orders.title,buyer_memo,seller_memo");
 								$req->setTid($result[$i]['tID']);
 								$resp = $c->execute($req, $sessionKey);
 								echo "<td>".$resp->trade->receiver_name."</td>";
 								echo "<td>".$resp->trade->receiver_state.$resp->trade->receiver_city.$resp->trade->receiver_district.$resp->trade->receiver_address."</td>";
 								echo "<td>".$resp->trade->receiver_mobile."</td>";
 								echo "<td>".getOrderStatus($resp->trade->status)."</td>";
+								echo "<td>".$resp->trade->buyer_memo."</td>";
+								echo "<td>".$resp->trade->seller_memo."</td>";
 								echo "</tr>";
 								$i++;
 							}

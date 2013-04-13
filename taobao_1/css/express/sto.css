@@ -46,3 +46,43 @@
 	left: 107px;
 	position: relative;
 }
+#sendshopname{
+	height: 20px;
+	width: 200px;
+	border: 1px solid red;
+	top: 13px;
+	left: 145px;
+	position: relative;
+}
+#custommark1{
+	height: 50px;
+	width: 250px;
+	border: 1px solid red;
+	top: 93px;
+	left: 117px;
+	position: relative;
+}
+#custommark2{
+	height: 50px;
+	width: 250px;
+	border: 1px solid red;
+	top: 102px;
+	left: 117px;
+	position: relative;
+}
+#custommark3{
+	height: 50px;
+	width: 250px;
+	border: 1px solid red;
+	top: -10px;
+	left: 370px;
+	position: relative;
+}
+#goodslist{
+	height: 50px;
+	width: 250px;
+	border: 1px solid red;
+	top: -360px;
+	left: 60px;
+	position: relative;
+}
