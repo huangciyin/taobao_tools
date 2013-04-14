@@ -56,7 +56,7 @@
 		<td colspan="6"><label>自定义二</label><input type="text" id="usermark2" style="width:500px;" value=<?php echo "\"".$userMark2."\"";?>></td>
 	</tr>
 	<tr>
-		<td colspan="6"><label>自定义三</label><input type="text" id="usermark3" style="width:500px;" value=<?php echo "\"".$userMark3."\"";?>><button id="insert">确定</button></td>
+		<td colspan="6"><label>自定义三</label><input type="text" id="usermark3" style="width:500px;" value=<?php echo "\"".$userMark3."\"";?>></td>
 	</tr>
 </table>
 </div>
@@ -69,7 +69,7 @@
 		<div style="width:130px; height:20px; float:left;">自定义快递模板二<input type="radio" name="customexpress" onclick="customexpress2()"></div>
 		<div style="width:130px; height:20px; float:left;">自定义快递模板三<input type="radio" name="customexpress" onclick="customexpress3()"></div>
 	</div>
-	<div id="img" style="height:500px; width:910px; background-image:url(source/sto.PNG);">
+	<div id="img" style="height:500px; width:910px; background-image:url(source/kedu.png);">
 		<div id="name">收件人姓名</div>
 		<div id="address">收件人地址</div>
 		<div id="mobile">收件人电话</div>
@@ -81,21 +81,100 @@
 		<div id="custommark2">自定义二</div>
 		<div id="custommark3">自定义三</div>
 		<div id="goodslist">产品列表</div>
+		<div id="xline" style="height:20px;width:2px;background-color:red;position:relative"></div>
+		<div id="yline" style="height:2px;width:20px;background-color:red;position:relative"></div>
 	</div>
 	<input type="submit" value="确定" id="updatecss" onclick="updatecss('customExpress1')">
 </div>
 <script type="text/javascript">
-$("#name").draggable();
-$("#address").draggable();
-$("#mobile").draggable();
-$("#sendname").draggable();
-$("#sendaddress").draggable();
-$("#sendtel").draggable();
-$("#sendshopname").draggable();
-$("#custommark1").draggable();
-$("#custommark2").draggable();
-$("#custommark3").draggable();
-$("#goodslist").draggable();
+$("#name").draggable({
+	drag:function(){
+		var x=$("#name").css("left");
+		var y=$("#name").css("top").split("px");
+		$("#xline").css({"left":x,"top":-415});
+		$("#yline").css({"left":0,"top":y[0]-415});
+	}
+});
+$("#address").draggable({
+	drag:function(){
+		var x=$("#address").css("left");
+		var y=$("#address").css("top").split("px");
+		$("#xline").css({"left":x,"top":-415});
+		$("#yline").css({"left":0,"top":y[0]-365});
+	}
+});
+$("#mobile").draggable({
+	drag:function(){
+		var x=$("#mobile").css("left");
+		var y=$("#mobile").css("top").split("px");
+		$("#xline").css({"left":x,"top":-415});
+		$("#yline").css({"left":0,"top":y[0]-340});
+	}
+});
+$("#sendname").draggable({
+	drag:function(){
+		var x=$("#sendname").css("left");
+		var y=$("#sendname").css("top").split("px");
+		$("#xline").css({"left":x,"top":-415});
+		$("#yline").css({"left":0,"top":y[0]-320});
+	}
+});
+$("#sendaddress").draggable({
+	drag:function(){
+		var x=$("#sendaddress").css("left");
+		var y=$("#sendaddress").css("top").split("px");
+		$("#xline").css({"left":x,"top":-415});
+		$("#yline").css({"left":0,"top":y[0]-270});
+	}
+});
+$("#sendtel").draggable({
+	drag:function(){
+		var x=$("#sendtel").css("left");
+		var y=$("#sendtel").css("top").split("px");
+		$("#xline").css({"left":x,"top":-415});
+		$("#yline").css({"left":0,"top":y[0]-250});
+	}
+});
+$("#sendshopname").draggable({
+	drag:function(){
+		var x=$("#sendshopname").css("left");
+		var y=$("#sendshopname").css("top").split("px");
+		$("#xline").css({"left":x,"top":-415});
+		$("#yline").css({"left":0,"top":y[0]-230});
+	}
+});
+$("#custommark1").draggable({
+	drag:function(){
+		var x=$("#custommark1").css("left");
+		var y=$("#custommark1").css("top").split("px");
+		$("#xline").css({"left":x,"top":-415});
+		$("#yline").css({"left":0,"top":y[0]-170});
+	}
+});
+$("#custommark2").draggable({
+	drag:function(){
+		var x=$("#custommark2").css("left");
+		var y=$("#custommark2").css("top").split("px");
+		$("#xline").css({"left":x,"top":-415});
+		$("#yline").css({"left":0,"top":y[0]-120});
+	}
+});
+$("#custommark3").draggable({
+	drag:function(){
+		var x=$("#custommark3").css("left");
+		var y=$("#custommark3").css("top").split("px");
+		$("#xline").css({"left":x,"top":-415});
+		$("#yline").css({"left":0,"top":y[0]-70});
+	}
+});
+$("#goodslist").draggable({
+	drag:function(){
+		var x=$("#goodslist").css("left");
+		var y=$("#goodslist").css("top").split("px");
+		$("#xline").css({"left":x,"top":-415});
+		$("#yline").css({"left":0,"top":y[0]-20});
+	}
+});
 
 var url="readcss.php?customexpress1";
 $.get(url,function(result){
@@ -117,23 +196,22 @@ $.get(url,function(result){
 $(function(){
 	$( "#dialog-setuser" ).dialog({
 	    autoOpen: false,
-	    width:620
+	    width:620,
+	    beforeClose:function(){
+	    	var username=$("#username").val();
+			var usertel=$("#usertel").val();
+			var usershopname=$("#usershopname").val();
+			var useraddress=$("#useraddress").val();
+			var usermark1=$("#usermark1").val();
+			var usermark2=$("#usermark2").val();
+			var usermark3=$("#usermark3").val();
+			var url="print.php?username="+username+"&usertel="+usertel+"&usershopname="+usershopname+"&useraddress="+useraddress+"&usermark1="+usermark1+"&usermark2="+usermark2+"&usermark3="+usermark3;
+			$.get(url);
+	    }
 	  });
 
 	$("#setuser").click(function(){
 		$( "#dialog-setuser" ).dialog( "open" );
-	});
-	$("#insert").click(function(){
-		var username=$("#username").val();
-		var usertel=$("#usertel").val();
-		var usershopname=$("#usershopname").val();
-		var useraddress=$("#useraddress").val();
-		var usermark1=$("#usermark1").val();
-		var usermark2=$("#usermark2").val();
-		var usermark3=$("#usermark3").val();
-		var url="print.php?username="+username+"&usertel="+usertel+"&usershopname="+usershopname+"&useraddress="+useraddress+"&usermark1="+usermark1+"&usermark2="+usermark2+"&usermark3="+usermark3;
-		$.get(url);
-		$("#dialog").dialog("close");
 	});
 });
 

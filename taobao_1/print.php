@@ -173,7 +173,7 @@ $(function(){
  	}
  	function custom1()
  	{
- 		$("#img").attr('style','height:500px; width:910px;');
+ 		$("#img").attr('style','height:500px; width:910px;background-image:url(source/kedu.png);');
  		$("#style").attr('href','');
 
  		var url1="readcss.php?customexpress1";
@@ -196,7 +196,7 @@ $(function(){
  	}
  	function custom2()
 	{
-		$("#img").attr('style','height:500px; width:910px;');
+		$("#img").attr('style','height:500px; width:910px;background-image:url(source/kedu.png);');
 		$("#style").attr('href','');
 
 		var url2="readcss.php?customexpress2";
@@ -218,7 +218,7 @@ $(function(){
 	}
 	function custom3()
 	{
-		$("#img").attr('style','height:500px; width:910px;');
+		$("#img").attr('style','height:500px; width:910px;background-image:url(source/kedu.png);');
 		$("#style").attr('href','');
 
 		var url3="readcss.php?customexpress3";
