@@ -29,25 +29,35 @@
 <title></title>
 <link rel="stylesheet" type="text/css" href="css/base.css">
 <link rel="stylesheet" type="text/css" href="css/forms.css">
-<link rel="stylesheet" type="text/css" href="css/tables.css">
+<!-- <link rel="stylesheet" type="text/css" href="css/tables.css"> -->
 <style type="text/css">
 label{
 	font-weight: bolder;
 }
+#table{
+	border: 1px solid #B4D5FF;
+	width:595px;
+}
+#td{
+	border-right:1px solid #B4D5FF;
+}
+#tr{
+	border-bottom: 1px solid #B4D5FF;
+}
 </style>
 </head>
 <body>
-	<table class="table table-bordered">
-		<tr>
-			<td colspan="2"><label>交易编号:</label><?php echo $tID;?></td>
-			<td colspan="2"><label>提交时间:</label><?php echo $created;?></td>
-			<td colspan="2"><label>收件人姓名:</label><?php echo $receiverName;?></td>
+	<table id="table">
+		<tr id="tr">
+			<td id="td" colspan="2"><label>交易编号:</label><?php echo $tID;?></td>
+			<td id="td" colspan="2"><label>提交时间:</label><?php echo $created;?></td>
+			<td id="td" colspan="2"><label>收件人姓名:</label><?php echo $receiverName;?></td>
 		</tr>
-		<tr><td colspan="6"><label>收件人地址:</label><?php echo $receicerLocation;?></td></tr>
-		<tr><td colspan="6"><label>物品详情:</label><?php echo $goods;?></td></tr>
-		<tr>
-			<td colspan="3"><label>金额:</label><?php echo $total_fee;?></td>
-			<td colspan="3"><label>操作:</label></td>
+		<tr id="tr"><td id="td" colspan="6"><label>收件人地址:</label><?php echo $receicerLocation;?></td></tr>
+		<tr id="tr"><td id="td" colspan="6"><label>物品详情:</label><?php echo $goods;?></td></tr>
+		<tr id="tr">
+			<td id="td" colspan="3"><label>金额:</label><?php echo $total_fee;?></td>
+			<td id="td" colspan="3"><label>操作:</label></td>
 		</tr>
 	</table>
 </body>

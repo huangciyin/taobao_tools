@@ -84,9 +84,10 @@
 		<div id="xline" style="height:20px;width:2px;background-color:red;position:relative"></div>
 		<div id="yline" style="height:2px;width:20px;background-color:red;position:relative"></div>
 	</div>
-	<input type="submit" value="确定" id="updatecss" onclick="updatecss('customExpress1')">
+	<!-- <input type="submit" value="确定" id="updatecss" onclick="updatecss('customExpress1')"> -->
 </div>
 <script type="text/javascript">
+var change="customExpress1";
 $("#name").draggable({
 	drag:function(){
 		var x=$("#name").css("left");
@@ -95,6 +96,7 @@ $("#name").draggable({
 		$("#yline").css({"left":0,"top":y[0]-415});
 	}
 });
+
 $("#address").draggable({
 	drag:function(){
 		var x=$("#address").css("left");
@@ -174,6 +176,10 @@ $("#goodslist").draggable({
 		$("#xline").css({"left":x,"top":-415});
 		$("#yline").css({"left":0,"top":y[0]-20});
 	}
+});
+
+$("#img").children().on("dragstop",function(){
+	updatecss(change);
 });
 
 var url="readcss.php?customexpress1";
@@ -258,7 +264,8 @@ function updatecss(css)
 
 function customexpress1()
 {
-	$("#updatecss").attr('onclick','updatecss(\'customExpress1\')');
+	// $("#updatecss").attr('onclick','updatecss(\'customExpress1\')');
+	change="customExpress1";
 	var url1="readcss.php?customexpress1";
 	$.get(url1,function(result1){
 	var arr1=result1.split("%");
@@ -277,7 +284,8 @@ function customexpress1()
 }
 function customexpress2()
 {
-	$("#updatecss").attr('onclick','updatecss(\'customExpress2\')');
+	// $("#updatecss").attr('onclick','updatecss(\'customExpress2\')');
+	change="customExpress2";
 	var url2="readcss.php?customexpress2";
 	$.get(url2,function(result2){
 	var arr2=result2.split("%");
@@ -296,7 +304,8 @@ function customexpress2()
 }
 function customexpress3()
 {
-	$("#updatecss").attr('onclick','updatecss(\'customExpress3\')');
+	// $("#updatecss").attr('onclick','updatecss(\'customExpress3\')');
+	change="customExpress3";
 	var url3="readcss.php?customexpress3";
 	$.get(url3,function(result3){
 	var arr3=result3.split("%");

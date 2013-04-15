@@ -177,15 +177,25 @@
 <title></title>
 <link rel="stylesheet" type="text/css" href="css/base.css">
 <link rel="stylesheet" type="text/css" href="css/forms.css">
-<link rel="stylesheet" type="text/css" href="css/tables.css">
+<!-- <link rel="stylesheet" type="text/css" href="css/tables.css"> -->
 <style type="text/css">
 label{
 	font-weight: bolder;
 }
+#table{
+	border: 1px solid #B4D5FF;
+	width:595px;
+}
+#td{
+	border-right:1px solid #B4D5FF;
+}
+#tr{
+	border-bottom: 1px solid #B4D5FF;
+}
 </style>
 </head>
 <body>
-	<table class="table table-bordered">
+	<table id="table">
 		<?php
 			$count=count($arr);
 			$m=0;
@@ -217,16 +227,16 @@ label{
 					$result_show="<a class=\"aftersale\" href=\"javascript:;\">线下售后</a>";
 				}
 
-				echo "<tr>".
-						"<td colspan=\"2\"><label>交易编号:</label>".$arr[$m]."</td>".
-						"<td colspan=\"2\"><label>提交时间:</label>".$created."</td>".
-						"<td colspan=\"2\"><label>收件人姓名:</label>".$receiverName."</td>".
+				echo "<tr id=\"tr\">".
+						"<td id=\"td\" colspan=\"2\"><label>交易编号:</label>".$arr[$m]."</td>".
+						"<td id=\"td\" colspan=\"2\"><label>提交时间:</label>".$created."</td>".
+						"<td id=\"td\" colspan=\"2\"><label>收件人姓名:</label>".$receiverName."</td>".
 					"</tr>".
-					"<tr><td colspan=\"6\"><label>收件人地址:</label>".$receicerLocation."</td></tr>".
-					"<tr><td colspan=\"6\"><label>物品详情:</label>".$goods."</td></tr>".
-					"<tr>".
-						"<td colspan=\"3\"><label>金额:</label>".$total_fee."</td>".
-						"<td colspan=\"3\"><label>操作:</label>".$result_show."</td>".
+					"<tr id=\"tr\"><td colspan=\"6\"><label>收件人地址:</label>".$receicerLocation."</td></tr>".
+					"<tr id=\"tr\"><td colspan=\"6\"><label>物品详情:</label>".$goods."</td></tr>".
+					"<tr id=\"tr\">".
+						"<td id=\"td\" colspan=\"3\"><label>金额:</label>".$total_fee."</td>".
+						"<td id=\"td\" colspan=\"3\"><label>操作:</label>".$result_show."</td>".
 					"</tr>".
 					"<br>";
 				$m++;

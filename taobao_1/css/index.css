@@ -1,0 +1,91 @@
+.table{
+	width: 889px;
+	margin-top: 10px;
+
+}
+.tr-head{
+	color: #404040; 
+	background: #e8f2ff;
+	border: 1px solid #B4D5FF;
+}
+.div-tid{
+	text-align:left;
+	float:left;
+}
+.div-goods{
+	height:65px;
+	width: 215px;
+	overflow: hidden;
+	border-right:1px solid #B4D5FF;
+}
+.border-no-top{
+	border: 1px solid #B4D5FF;
+	border-top: transparent;
+}
+.tr-body{
+	width: 890px;
+	float: left;
+}
+.div-address{
+	width:150px;
+	height:65px;
+	overflow: hidden;
+	border-right:1px solid #B4D5FF;
+	margin-left: 5px;
+}
+.div-buyer-memo{
+	width:120px;
+	height:65px;
+	overflow:hidden;
+	border-right:1px solid #B4D5FF;
+	margin-left: 5px;
+}
+.div-status{
+	width:70px;
+	height:65px;
+	overflow:hidden;
+	margin-right: 5px;
+	margin-left: 5px;
+}
+.div-img{
+	float:left;
+	margin-right:5px;
+	width:55px;
+	height:65px;
+}
+.div-goods-name{
+	float:left;
+	width:150px;
+	height:65px;
+	overflow: hidden;
+	margin-right: 5px;
+}
+.div-name{
+	width:60px;
+	height:65px;
+	overflow:hidden;
+	border-right:1px solid #B4D5FF;
+	margin-left: 5px;
+}
+.div-mobile{
+	width:80px;
+	height:65px;
+	overflow:hidden;
+	border-right:1px solid #B4D5FF;
+	margin-left: 5px;
+}
+li{
+	display: inline;
+	padding-left: 20px;
+	font-size: 15px;
+}
+tbody{
+	font-size: 10px;
+	font: 12px/1.5 Tahoma,Helvetica,Arial,'宋体b8b\4f53',sans-serif;
+}
+img{
+	max-width: 50px;
+	max-height: 50px;
+	margin-top: 7px;
+	margin-left: 5px;
+}

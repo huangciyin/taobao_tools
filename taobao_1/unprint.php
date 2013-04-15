@@ -10,25 +10,16 @@
 	}else{
 		$pageNo=1;
 	}
-	$pagenum=($pageNo-1)*20;
-	$lastPage=ceil($result_page[0][0]/20);
+	$pagenum=($pageNo-1)*5;
+	$lastPage=ceil($result_page[0][0]/5);
 ?>
 <html>
 <head>
 <title></title>
 <link rel="stylesheet" type="text/css" href="css/base.css">
 <link rel="stylesheet" type="text/css" href="css/forms.css">
-<link rel="stylesheet" type="text/css" href="css/tables.css">
-<style type="text/css">
-li{
-	display: inline;
-	padding-left: 20px;
-	font-size: 15px;
-}
-tbody{
-	font-size: 12px;
-}
-</style>
+<!-- <link rel="stylesheet" type="text/css" href="css/tables.css"> -->
+<link rel="stylesheet" type="text/css" href="css/index.css">
 <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
 <link rel="stylesheet" type="text/css" href="http://code.jquery.com/ui/1.10.1/themes/base/jquery-ui.css">
 <script type="text/javascript" src="http://code.jquery.com/jquery-1.9.1.js"></script>
@@ -41,8 +32,8 @@ tbody{
 	  });
 
 	  $( ".opener" ).click(function() {
-	  	var tid=$(this).parent().parent().children("td:eq(0)").html();
-	  	var url="print.php?tid="+tid;
+	  	var tid=$(this).parents().prev().find("label").html().split("订单编号：");
+	  	var url="print.php?tid="+tid[1];
 
 	  	$.get(url,function(result){
 	  		$("#dialog").html(result);
@@ -61,66 +52,52 @@ tbody{
 		<div class="row">
 			<?php include 'leftside.html';?>
 			<div class="span18" style="border-width:thin;border:1px solid #dddddd; padding:7px;">
-				<table class="table table-bordered table-condensed" style="margin-top: 10px;">
-					<colgroup>
-		                <col class="span2"></col>
-		                <col class="span1"></col>
-		                <col class="span4"></col>
-						<col class="span1"></col>
-						<col class="span2"></col>
-						<col class="span4"></col>
-            		</colgroup>
-					<thead>
-						<tr>
-							<th>交易编号</th>
-							<th>姓名</th>
-							<th>地址</th>
-							<th>电话</th>
-							<th>操作</th>
-							<th>商品</th>
-						</tr>
-					</thead>
-					<tbody>
-						<?php
-							$result=$operatedb->Execsql("select * from orders where uID='".$uID."' and printStatus='' limit ".$pagenum.",20",$conn);
-							
-							if ($pageNo<$lastPage) {
+				<table class="table">
+					<?php
+						$result=$operatedb->Execsql("select * from orders where uID='".$uID."' and printStatus='' limit ".$pagenum.",20",$conn);
+						
+						if ($pageNo<$lastPage) {
+							# code...
+							$per=4;
+						}elseif ($pageNo==$lastPage) {
+							# code...
+							$per=$result_page[0][0]-($pageNo-1)*5-1;
+						}elseif ($lastPage==0) {
+							# code...
+							$per=-1;
+						}
+						$i=0;
+						while ($i <= $per) {
+							# code...
+							echo "<tbody class=\"table\">";
+							echo "<tr><td></td></tr>";
+							echo "<tr class=\"tr-head\">";
+							$req=new TradeFullinfoGetRequest;
+							$req->setFields("pic_path,created,status,receiver_name,receiver_state,receiver_city,receiver_district,receiver_address,receiver_mobile,orders.title,orders.num,buyer_memo,seller_memo");
+							$req->setTid($result[$i]['tID']);
+							$resp=$c->execute($req,$sessionKey);
+							$goodscount=count($resp->trade->orders->order)-1;
+							$m=0;
+							while ($m <= $goodscount) {
 								# code...
-								$per=19;
-							}elseif ($pageNo==$lastPage) {
-								# code...
-								$per=$result_page[0][0]-($pageNo-1)*20-1;
-							}elseif ($lastPage==0) {
-								# code...
-								$per=-1;
+								@$goods.=$resp->trade->orders->order[$m]->title." X ".$resp->trade->orders->order[$m]->num;
+								$m++;
 							}
-							$i=0;
-							while ($i <= $per) {
-								# code...
-								echo "<tr>";
-								echo "<td>".$result[$i]['tID']."</td>";
-								$req=new TradeFullinfoGetRequest;
-								$req->setFields("receiver_name,receiver_state,receiver_city,receiver_district,receiver_address,receiver_mobile,orders.title,orders.num");
-								$req->setTid($result[$i]['tID']);
-								$resp=$c->execute($req,$sessionKey);
-								echo "<td>".$resp->trade->receiver_name."</td>";
-								echo "<td>".$resp->trade->receiver_state.$resp->trade->receiver_city.$resp->trade->receiver_district.$resp->trade->receiver_address."</td>";
-								echo "<td>".$resp->trade->receiver_mobile."</td>";
-								echo "<td><a href=\"javascript:void(0);\" class=\"opener\">打印快递单</a></td>";
-								$goodscount=count($resp->trade->orders->order)-1;
-								$m=0;
-								while ($m <= $goodscount) {
-									# code...
-									@$goods.=$resp->trade->orders->order[$m]->title." X ".$resp->trade->orders->order[$m]->num;
-									$m++;
-								}
-								echo "<td>".$goods."</td>";
-								$goods="";
-								echo "</tr>";
-								$i++;
-							}
-						?>
-					</tbody>
+							echo "<td><div class=\"div-tid\"><span style=\"display:inline-block;width:200px;\"><label style=\"margin-bottom:0px;\">订单编号：".$result[$i]['tID']."</label></span><span>成交时间：".$resp->trade->created."</span></div></td></tr>";
+							echo "<tr class=\"tr-body border-no-top\">";
+							echo "<td><div class=\"div-goods\"><div class=\"div-img\"><img src=\"".$resp->trade->pic_path."\"></div><div class=\"div-goods-name\">".$goods."</div></div></td>";
+							echo "<td><div class=\"div-name\">".$resp->trade->receiver_name."</div></td>";
+							echo "<td><div class=\"div-mobile\">".$resp->trade->receiver_mobile."</div></td>";
+							echo "<td><div class=\"div-address\">".$resp->trade->receiver_state.$resp->trade->receiver_city.$resp->trade->receiver_district.$resp->trade->receiver_address."</div></td>";
+							echo "<td><div class=\"div-buyer-memo\">".$resp->trade->buyer_memo."</div></td>";
+							echo "<td><div class=\"div-buyer-memo\">".$resp->trade->seller_memo."</div></td>";
+							echo "<td><a href=\"javascript:void(0);\" class=\"opener\">打印快递单</a></td>";
+							echo "</tr>";
+							echo "</tbody>";
+							$i++;
+							$goods="";
+						}
+					?>
 				</table>
 			</div>
 		</div>
@@ -132,7 +109,7 @@ tbody{
  		# code...
  		$total=200;
  	}
- 	$page=new Fenye($total,20,'unprint.php');
+ 	$page=new Fenye($total,5,'unprint.php');
  	$page->showFenye($pageNo);
  ?>
 </div>

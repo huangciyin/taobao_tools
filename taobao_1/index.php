@@ -11,25 +11,16 @@
 	}else{
 		$pageNo = 1;
 	}
-	$itemNum=($pageNo-1)*20;
-	$lastPage=ceil($result_page[0][0]/20);
+	$itemNum=($pageNo-1)*5;
+	$lastPage=ceil($result_page[0][0]/5);
 ?>
 <html>
 <head>
 <title></title>
 <link rel="stylesheet" type="text/css" href="css/base.css">
 <link rel="stylesheet" type="text/css" href="css/forms.css">
-<link rel="stylesheet" type="text/css" href="css/tables.css">
-<style type="text/css">
-li{
-	display: inline;
-	padding-left: 20px;
-	font-size: 15px;
-}
-tbody{
-	font-size: 10px;
-}
-</style>
+<!-- <link rel="stylesheet" type="text/css" href="css/tables.css"> -->
+<link rel="stylesheet" type="text/css" href="css/index.css">
 <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
 <link rel="stylesheet" type="text/css" href="http://code.jquery.com/ui/1.10.1/themes/base/jquery-ui.css">
 <script type="text/javascript" src="http://code.jquery.com/jquery-1.9.1.js"></script>
@@ -88,61 +79,53 @@ $(function(){
 					<input type="text" class="span6" id="content" placeholder="姓名 手机号码 收货地址 交易编号" >
 					<a href="javascript:;" id="search">查询</a>
 				</form>
-				<table class="table table-bordered table-condensed" style="margin-top: 10px;">
-					<colgroup>
-		                <col class="span1"></col>
-		                <col class="span1"></col>
-		                <col class="span4"></col>
-						<col class="span2"></col>
-						<col class="span2"></col>
-						<col class="span2"></col>
-						<col class="span2"></col>
-            		</colgroup>
-					<thead>
-						<tr>
-							<th>交易编号</th>
-							<th>姓名</th>
-							<th>地址</th>
-							<th>电话</th>
-							<th>订单状态</th>
-							<th>买家备注</th>
-							<th>卖家备注</th>
-						</tr>
-					</thead>
-					<tbody>
-						<?php
-							$result=$operatedb->Execsql("select * from orders where uID='".$uID."' limit ".$itemNum.",20",$conn);
+				<table class="table">
+					<?php
+						$result=$operatedb->Execsql("select * from orders where uID='".$uID."' limit ".$itemNum.",20",$conn);
 
-							if ($pageNo<$lastPage) {
+						if ($pageNo<$lastPage) {
+							# code...
+							$per=4;
+						}elseif ($pageNo==$lastPage) {
+							# code...
+							$per=$result_page[0][0]-($pageNo-1)*5-1;
+						}elseif ($lastPage==0) {
+							# code...
+							$per=-1;
+						}
+						$i=0;
+						while ($i <= $per) {
+							# code...
+							echo "<tbody class=\"table\">";
+							echo "<tr><td></td></tr>";
+							echo "<tr class=\"tr-head\">";
+							$req = new TradeFullinfoGetRequest;
+							$req->setFields("pic_path,created,status,receiver_name,receiver_state,receiver_city,receiver_district,receiver_address,receiver_mobile,orders.title,orders.num,buyer_memo,seller_memo");
+							$req->setTid($result[$i]['tID']);
+							$resp = $c->execute($req, $sessionKey);
+							$goodscount=count($resp->trade->orders->order)-1;
+							$m=0;
+							while ($m <= $goodscount) {
 								# code...
-								$per=19;
-							}elseif ($pageNo==$lastPage) {
-								# code...
-								$per=$result_page[0][0]-($pageNo-1)*20-1;
-							}elseif ($lastPage==0) {
-								# code...
-								$per=-1;
+								@$goods.=$resp->trade->orders->order[$m]->title." X ".$resp->trade->orders->order[$m]->num;
+								$m++;
 							}
-							$i=0;
-							while ($i <= $per) {
-								# code...
-								echo "<tr>";
-								echo "<td><a href=\"javascript:void(0);\" class=\"opener\">".$result[$i]['tID']."</a></td>";
-								$req = new TradeFullinfoGetRequest;
-								$req->setFields("status,receiver_name,receiver_state,receiver_city,receiver_district,receiver_address,receiver_mobile,orders.title,buyer_memo,seller_memo");
-								$req->setTid($result[$i]['tID']);
-								$resp = $c->execute($req, $sessionKey);
-								echo "<td>".$resp->trade->receiver_name."</td>";
-								echo "<td>".$resp->trade->receiver_state.$resp->trade->receiver_city.$resp->trade->receiver_district.$resp->trade->receiver_address."</td>";
-								echo "<td>".$resp->trade->receiver_mobile."</td>";
-								echo "<td>".getOrderStatus($resp->trade->status)."</td>";
-								echo "<td>".$resp->trade->buyer_memo."</td>";
-								echo "<td>".$resp->trade->seller_memo."</td>";
-								echo "</tr>";
-								$i++;
-							}
-						?>
-					</tbody>
+							echo "<td><div class=\"div-tid\"><span style=\"display:inline-block;width:200px;\"><label style=\"margin-bottom:0px;\">订单编号：<a href=\"javascript:void(0);\" class=\"opener\">".$result[$i]['tID']."</a></label></span><span>成交时间：".$resp->trade->created."</span></div></td></tr>";
+							echo "<tr class=\"tr-body border-no-top\">";
+							echo "<td><div class=\"div-goods\"><div class=\"div-img\"><img src=\"".$resp->trade->pic_path."\"></div><div class=\"div-goods-name\">".$goods."</div></div></td>";
+							echo "<td><div class=\"div-name\">".$resp->trade->receiver_name."</div></td>";
+							echo "<td><div class=\"div-mobile\">".$resp->trade->receiver_mobile."</div></td>";
+							echo "<td><div class=\"div-address\">".$resp->trade->receiver_state.$resp->trade->receiver_city.$resp->trade->receiver_district.$resp->trade->receiver_address."</div></td>";
+							echo "<td><div class=\"div-buyer-memo\">".$resp->trade->buyer_memo."</div></td>";
+							echo "<td><div class=\"div-buyer-memo\">".$resp->trade->seller_memo."</div></td>";
+							echo "<td><div class=\"div-status\">".getOrderStatus($resp->trade->status)."</div></td>";
+							echo "</tr>";
+							echo "</tbody>";
+							$goods="";
+							$i++;
+						}
+					?>
+				
 				</table>
 			</div>
 		</div>
@@ -154,7 +137,7 @@ $(function(){
  		# code...
  		$total=200;
  	}
- 	$page=new Fenye($total,20,'index.php');
+ 	$page=new Fenye($total,5,'index.php');
  	$page->showFenye($pageNo);
  ?>
 </div>
