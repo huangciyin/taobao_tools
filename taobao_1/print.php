@@ -65,11 +65,18 @@ $(function(){
 		# code...
 		$tID=$_GET['send'];
 		$req = new TradeFullinfoGetRequest;
-		$req->setFields("num_iid");
+		$req->setFields("num_iid,orders.sku_id");
 		$req->setTid($_GET['send']);
 		$resp = $c->execute($req, $sessionKey);
+		$goodscount=count($resp->trade->orders->order)-1;
+		$m=0;
+		while ($m <= $orderscount) {
+			# code...
+			$sku_id=$resp->trade->orders->order[$m]->sku_id;
+			$result_minus=$operatedb->Execsql("update sku set stock=stock-1 where num_iid='".$resp->trade->num_iid."' and sku_id='".$sku_id."'",$conn);
+			$m++;
+		}
 		$result=$operatedb->Execsql("update orders set printStatus='sent' where tID='".$tID."'",$conn);
-		$result_minus=$operatedb->Execsql("update stocklist set stock=stock-1 where uID='".$uID."' and numID='".$resp->trade->num_iid."'",$conn);
 	}elseif (isset($_GET['delete'])&&!empty($_GET['delete'])) {
 		# code...
 		$tID=$_GET['delete'];
@@ -107,6 +114,12 @@ $(function(){
 	}elseif (isset($_GET['addmark'])&&!empty($_GET['addmark'])) {
 		# code...
 		$result=$operatedb->Execsql("update aftersale set mark=CONCAT(mark,'mark".$_GET['addmark']."') where uID='".$uID."' and title='".$_GET['title']."'",$conn);
+	}elseif (isset($_GET['updatesku'])&&!empty($_GET['updatesku'])) {
+		# code...
+		$result=$operatedb->Execsql("update sku set stock='".$_GET['value']."' where num_iid='".$_GET['updatesku']."' and sku_id='".$_GET['sku']."'",$conn);
+	}elseif (isset($_GET['updatewarn'])&&!empty($_GET['updatewarn'])) {
+		# code...
+		$result=$operatedb->Execsql("update sku set warn='".$_GET['value']."' where num_iid='".$_GET['updatewarn']."' and sku_id='".$_GET['sku']."'",$conn);
 	}
 	
 ?>

@@ -9,27 +9,40 @@
 	$req->setResult("bad");
 	$resp1 = $c->execute($req, $sessionKey);
 	$bad=$resp1->total_results;
+	$num_iid=$operatedb->Execsql("select numID from stocklist where uID='".$uID."'",$conn);
+	$i=0;
+	while ($i <= count($num_iid)-1) {
+		$stock=$operatedb->Execsql("select count(*) from sku where num_iid='".$num_iid[$i]['numID']."' and stock<warn",$conn);
+		$hurry=$operatedb->Execsql("select count(*) from sku where num_iid='".$num_iid[$i]['numID']."' and stock<0",$conn);
+		$total_hurry+=$hurry[0][0];
+		$total_stock+=$stock[0][0];
+		$i++;
+	}
 
 	$unprint=$operatedb->Execsql("select count(*) from orders where uID='".$uID."' and printStatus=''",$conn);
 	$refund=$operatedb->Execsql("select count(*) from refundlist where uID='".$uID."'",$conn);
-	$stock=$operatedb->Execsql("select count(*) from stocklist where uID='".$uID."' and stock<5",$conn);
+	// $stock=
+	$printed=$operatedb->Execsql("select count(*) from orders where tID='".$tID."' and printStatus='printed'",$conn);
 ?>
 <div style="border-width:thin;border:1px solid #dddddd;background-color:#f2f8fa;margin-left:60px;height:100px; width:1112px;">
-	<div id="id1"></div>
+	<div id="id1">
+		<div style="float:left;height:40px;width:100px;"></div>
+		<div style="float:left;height:40px;width:221px;background-image: url(source/logos/logo.png);"></div>
+	</div>
 	<div id="id2">
 		<div id="id3"></div>
-		<div id="id4">评价=====中评:<?php echo $neutral;?>;差评:<?php echo $bad;?></div>
-		<div id="id4">未打印订单=<?php echo $unprint[0][0];?></div>
-		<div id="id4">售后=<?php echo $refund[0][0];?></div>
-		<div id="id4">补货=<?php echo $stock[0][0];?></div>
+		<div id="id4"><div style="height:18px;width:178px;"><img src="source/logos/icon_bad.png"><?php echo $neutral;?>个差评生效中</div><div style="height:18px;width:178px;"><img src="source/logos/icon_middle.png"><?php echo $bad;?>个中评生效中</div></div>
+		<div id="id4"><div style="height:18px;width:178px;"><img src="source/logos/icon_print.png"><?php echo $unprint[0][0];?>个订单待打印</div><div style="height:18px;width:178px;"><img src="source/logos/print_car.png"><?php echo $printed[0][0];?>个订单待发货</div></div>
+		<div id="id4"><div style="height:18px;width:178px;"><img src="source/logos/print_goods_blue.png"><?php echo $total_hurry;?>个紧急补货</div><div style="height:18px;width:178px;"><img src="source/logos/print_goods_yellow.png"><?php echo $total_stock;?>个待进货</div></div>
+		<div id="id4"><div style="height:18px;width:178px;"><img src="source/logos/icon_aftersales.png"><?php echo $refund[0][0];?>个售后问题</div></div>
 		<div id="id3"></div>
 	</div>
-	<div id="id1"></div>
 </div>
 <style type="text/css">
 #id1{
 	width: 1112px;
-	height: 20px;
+	height: 40px;
+
 }
 #id2{
 	width: 1112px;

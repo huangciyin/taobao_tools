@@ -136,5 +136,45 @@
 		}
 		 return $file_contents;
 	}
+	function getPvs($cid,$pvs){
+		require_once 'config.php';
+		global $sessionKey,$appkey,$secretKey,$format,$c;
 
+		$req = new ItempropvaluesGetRequest;
+		$req->setFields("prop_name,name,sort_order");
+		$req->setCid($cid);
+		$req->setPvs($pvs);
+		$resp = $c->execute($req);
+		return $resp;
+	}
+	function draw($col,$row,$height,$width,$content,$id){
+		$i=1;
+		while ( $i<= $col) {
+			# code...
+			$n=1;
+			while ($n <= $row) {
+				# code...
+				$str.="<div id=\"".$id."\" style=\"height:".$height."px; width:".$width."px; text-align:center;line-height:".$height."px;\">".$content."</div>";
+				$n++;
+			}
+			echo "<div style=\"float:left;\">".$str."</div>";
+			$str="";
+			$i++;
+		}
+
+	}
+
+	function insert_sort($arr){
+	    $count = count($arr);
+	    for($i=1; $i<$count; $i++){
+	        $tmp = $arr[$i];
+	        $j = $i - 1;
+	        while($arr[$j] > $tmp){
+	            $arr[$j+1] = $arr[$j];
+	            $arr[$j] = $tmp;
+	            $j--;
+	        }
+	    }
+	    return $arr;
+	}
 ?>

@@ -56,7 +56,7 @@ tbody{
 	  			$(this).prev().css("display","none");
 	  			$(this).parent().before($("<div></div>").text(markcontent));
 	  			$(this).parent().prev().addClass("span17 border");
-	  			$(this).parent().prev().css("margin-top","2px");
+	  			$(this).parent().prev().css({"margin-top":"2px","width":"870px"});
 	  			$(this).text("添加新记录");
 	  			var url="print.php?addmark="+markcontent+"&title="+title;
 	  			$.get(url);
@@ -112,9 +112,9 @@ tbody{
 					$i=0;
 					while ($i <= $result_page[0][0]-1) {
 						# code...
-						echo "<div class=\"span17 border\" style=\"	margin-top:5px;background: #e8f2ff;border: 1px solid #B4D5FF;\">".
+						echo "<div class=\"span17 border\" style=\"width:870px;	margin-top:5px;background: #e8f2ff;border: 1px solid #B4D5FF;\">".
 								"<div class=\"center\" style=\"width:30px; float:left;\">".($i+1)."</div>".
-								"<div class=\"center\" style=\"float:left;border-left: 1px solid #dddddd;border-right:1px solid #dddddd; width:500px;\">".$result[$i]['title']."</div>".
+								"<div class=\"center\" style=\"float:left;border-left: 1px solid #dddddd;border-right:1px solid #dddddd; width:730px;\">".$result[$i]['title']."</div>".
 								"<div class=\"center\" style=\"float:left; width:50px;\"><a href=\"javascript:;\" class=\"zhankai\">展开</a>".
 								"</div>".
 								"<div class=\"center\" style=\"float:left; width:50px;border-left: 1px solid #dddddd;\"><a href=\"javascript:;\" class=\"delete\" style=\" \">删除</a>".
@@ -126,14 +126,14 @@ tbody{
 						$j=1;
 						while ($j <= $count-1) {
 							# code...
-							echo "<div class=\"span17 border\" style=\"margin-top:2px;\">".$arr[$j]."</div>";
+							echo "<div class=\"span17 border\" style=\"margin-top:2px;width:870px;\">".$arr[$j]."</div>";
 							$j++;
 						}
 						echo "<div class=\"span17\"><input type=\"text\" style=\"display:none;\"><a href=\"javascript:;\" class=\"addmark\">添加新记录</a></div>";
 						echo "</div>";
 						$i++;
 					}
-					echo "<div class=\"span17 border\" style=\"margin-top:5px;\"><input tpye=\"text\" style=\"display:none;\"><a href=\"javascript:;\" id=\"addmark\">添加新的线下售后</a><div>";
+					echo "<div class=\"span17 border\" style=\"margin-top:5px;width:870px;\"><input tpye=\"text\" style=\"display:none;\"><a href=\"javascript:;\" id=\"addmark\">添加新的线下售后</a><div>";
 				?>
 			</div>
 		</div>

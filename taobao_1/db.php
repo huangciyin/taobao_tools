@@ -110,7 +110,7 @@
 		}elseif ($_GET['type']=='stock') {
 			# code...
 			$req = new ItemsOnsaleGetRequest;
-			$req->setFields("num_iid,num,outer_id");
+			$req->setFields("num_iid,num");
 			if (isset($_GET['pageNo'])&&!empty($_GET['pageNo'])) {
 				# code...
 				$req->setPageNo($_GET['pageNo']);
@@ -126,28 +126,59 @@
 				$total=$resp->total_results-($_GET['pageNo']-1)*40-1;
 			}
 
-			$arrStock=array('uID','numId','outerID','stock');
+			$arrStock=array('uID','numId','stock');
 			$j=0;
 			while ($j <= $total) {
 				# code...
 				$numID=$resp->items->item[$j]->num_iid;
-				@$outerID=$resp->items->item[$j]->outer_id;
 				$result_select=$operatedb->Execsql("select * from stocklist where numID='".$numID."'",$conn);
 				if ($result_select==true) {
 					# code...
 					// $result_update=$operatedb->Execsql("update stocklist set stock='".$stock."' where numID='".$numID."'",$conn);
 					$j++;
 				}else{
-					$strStock=sprintf("insert into stocklist (%s) values ('%s','%s','%s','')",implode(',',$arrStock),$uID,$numID,$outerID);
+					$strStock=sprintf("insert into stocklist (%s) values ('%s','%s','')",implode(',',$arrStock),$uID,$numID);
 					$result_insert=$operatedb->Execsql($strStock,$conn);
 					$j++;
 				}
 			}
+		}elseif($_GET['type']=='sku'){
+			$result=$operatedb->Execsql("select * from stocklist where uID='".$uID."'",$conn);
+			$result_count=count($result);
+			$r=0;
+			while ($r <= $result_count-1) {
+				# code...
+				$numID=$result[$r]['numID'];
+
+				$req = new ItemGetRequest;
+				$req->setFields("sku");
+				$req->setNumIid($numID);
+				$resp = $c->execute($req, $sessionKey);
+
+				if ($resp!=NULL) {
+					@$skus_count=count($resp->item->skus->sku);
+					$t=0;
+					while ($t <= $skus_count-1) {
+						# code...
+						@$sku_id=$resp->item->skus->sku[$t]->sku_id;
+						$result_selectsku=$operatedb->Execsql("select * from sku where num_iid='".$numID."' and sku_id='".$sku_id."'",$conn);
+						if ($result_selectsku==true) {
+							# code...
+							$t++;
+						}else{
+							$result_insertsku=$operatedb->Execsql("insert into sku(num_iid,sku_id,stock,warn) values('".$numID."','".$sku_id."','0','0')",$conn);
+							$t++;
+						}
+					}
+				}else{
+					echo "null";
+				}
+				$r++;
+			}
+			
 		}
 
-	}else{
 
 	}
-
 	
 ?>
