@@ -1,17 +1,74 @@
 <?php
 	header("Content-type:text/html;charset=utf-8");
-	require "conndb.inc.php";
+	require_once "conndb.inc.php";
 	require_once 'config.php';
 
+	if ( isset( $_GET['pageNo']) && !empty( $_GET['pageNo'])) {
+		$pageNo=$_GET['pageNo'];
+	}else{
+		$pageNo = 1;
+	}
+	
+	function getInfoById($tid){
+		require_once 'config.php';
+		global $sessionKey,$appkey,$secretKey,$format,$c;
+		$req = new TradeFullinfoGetRequest;
+		$req->setFields("tid,pic_path,created,status,receiver_name,receiver_state,receiver_city,receiver_district,receiver_address,receiver_mobile,orders.title,orders.num,buyer_memo,seller_memo");
+		$req->setTid($tid);
+		$resp = $c->execute($req, $sessionKey);
+		return $resp;
+	}
 
-	$result_page=$operatedb->Execsql("select count(*) from aftersale where uID='".$uID."'",$conn);
+	function drawBody($resp){
+		echo "<tbody class=\"table\">";
+		echo "<tr style=\"height:8px;\"><td></td></tr>";
+		echo "<tr class=\"tr-head\">";
+		$goodscount=count($resp->trade->orders->order)-1;
+		$m=0;
+		while ($m <= $goodscount) {
+		# code...
+		@$goods.=$resp->trade->orders->order[$m]->title." X ".$resp->trade->orders->order[$m]->num;
+		$m++;
+		}
+		echo "<td><span style=\"display:inline-block;width:200px;\"><label style=\"margin-bottom:0px;\">订单编号：<a href=\"javascript:void(0);\" class=\"opener\">".$resp->trade->tid."</a></label></span><span>成交时间：".$resp->trade->created."</span></td></tr>";
+		echo "<tr class=\"tr-body border-no-top\">";
+		echo "<td><div class=\"div-goods\"><div class=\"div-img\"><img src=\"".$resp->trade->pic_path."\"></div><div class=\"div-goods-name\">".$goods."</div></div></td>";
+		echo "<td><div class=\"div-name\">".$resp->trade->receiver_name."</div></td>";
+		echo "<td><div class=\"div-mobile\">".@$resp->trade->receiver_mobile."</div></td>";
+		echo "<td><div class=\"div-address\">".$resp->trade->receiver_state.$resp->trade->receiver_city.$resp->trade->receiver_district.$resp->trade->receiver_address."</div></td>";
+		echo "<td><div class=\"div-buyer-memo\">".@$resp->trade->buyer_memo."</div></td>";
+		echo "<td><div class=\"div-buyer-memo\">".@$resp->trade->seller_memo."</div></td>";
+		echo "<td><div class=\"div-status\">".getOrderStatus($resp->trade->status)."</div></td>";
+		echo "<td><div class=\"div-active\"><a class=\"aftersale\" href=\"javascript:;\">进入处理</a></div></td>";
+		echo "</tr>";
+		echo "</tbody>";
+		$goods="";
+	}
+
+	function drawTable($content){
+		$arr=explode("mark", $content);
+		$count=count($arr);
+		echo "<tbody style=\"display:none;\">";
+		$j=1;
+		while ($j <= $count-1) {
+			echo "<tr style=\"border: 1px solid #B4D5FF;border-top: transparent;\">";
+			echo "<td>".$arr[$j]."</td>";
+			echo "</tr>";
+			$j++;
+		}
+		echo "<tr style=\"border: 1px solid #B4D5FF;border-top: transparent;\">";
+		echo "<td><input type=\"text\" style=\"display:none;\"><a href=\"javascript:;\" class=\"addmark\">添加新记录</a></td>";
+		echo "</tr>";
+		echo "</tbody>";
+
+	}
 ?>
 <html>
 <head>
 <title></title>
 <link rel="stylesheet" type="text/css" href="css/base.css">
 <link rel="stylesheet" type="text/css" href="css/forms.css">
-<link rel="stylesheet" type="text/css" href="css/tables.css">
+<link rel="stylesheet" type="text/css" href="css/index.css">
 <style type="text/css">
 li{
 	display: inline;
@@ -21,13 +78,6 @@ li{
 tbody{
 	font-size: 12px;
 }
-.border{
-	border-width:thin;
-	border:1px solid #dddddd;
-}
-.center{
-	text-align: center;
-}
 </style>
 <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
 <link rel="stylesheet" type="text/css" href="http://code.jquery.com/ui/1.10.1/themes/base/jquery-ui.css">
@@ -36,14 +86,14 @@ tbody{
 <script>
 	$(function() {
 
-	  $( ".zhankai" ).click(function() {
+	  $( ".aftersale" ).click(function() {
 	  	// $(".mark").slideToggle("fast",function(){ });
-	  	if ($(this).text()=="展开") {
+	  	if ($(this).text()=="进入处理") {
 	  		$(this).text("合并");
 	  	} else{
-	  		$(this).text("展开");
+	  		$(this).text("进入处理");
 	  	};
-	  	$(this).parent().parent().next().toggle();
+	  	$(this).parent().parent().parent().parent().next().toggle();
 	  });
 	  $(".addmark").click(function(){
 	  	if($(this).text()!="添加"){
@@ -51,38 +101,17 @@ tbody{
 	  		$(this).text("添加");
 	  	}else{
 	  		var markcontent=$(this).prev().val();
-	  		var title=$(this).parents().prev().children("div:eq(1)").text();
+	  		var title=$(this).parent().parent().parent().prev().find("a:eq(0)").text();
 	  		if (markcontent!='') {
 	  			$(this).prev().css("display","none");
-	  			$(this).parent().before($("<div></div>").text(markcontent));
-	  			$(this).parent().prev().addClass("span17 border");
-	  			$(this).parent().prev().css({"margin-top":"2px","width":"870px"});
+	  			$(this).parent().parent().before($("<tr><td></td></tr>").text(markcontent));
+	  			$(this).parent().parent().prev().css({"border":"1px solid #B4D5FF","border-toph":"transparent"});
 	  			$(this).text("添加新记录");
 	  			var url="print.php?addmark="+markcontent+"&title="+title;
 	  			$.get(url);
 	  		}else{
 
 	  		}
-	  	};
-	  });
-
-	  $("#addmark").click(function(){
-	  	if($(this).text()!="添加"){
-	  		$(this).prev().removeAttr("style");
-	  		$(this).text("添加");
-	  	}else{
-	  		var addcontent=$(this).prev().val();
-	  		if (addcontent!='') {
-	  			
-	  			$(this).prev().css("display","none");
-	  			$(this).text("添加新的线下售后");
-	  			var url="print.php?addaftersale="+addcontent;
-	  			$.get(url,function(){
-	  				location.reload(true).delay(1000);
-	  			});
-	  			
-	  			
-	  		} else{};
 	  	};
 	  });
 
@@ -100,43 +129,49 @@ tbody{
 </head>
 <body>
 	<div class="container">
-		<div class="row">
-			<div style="height:100px;"></div>
+		<div class="row" style="margin-bottom:1px;">
+			<div style="height:170px;"><?php include 'top.html';?></div>
 		</div>
 		<div class="row">
 			<?php include 'leftside.html';?>
-			<div class="span18" style="border-width:thin;border:1px solid #dddddd; padding:10px;">
-				<?php
-					$result=$operatedb->Execsql("select * from aftersale where uID='".$uID."'",$conn);
-					// $per = (( $pageNo == $lastPage) ? $result_page[0][0]%20-1 : 19);
-					$i=0;
-					while ($i <= $result_page[0][0]-1) {
-						# code...
-						echo "<div class=\"span17 border\" style=\"width:870px;	margin-top:5px;background: #e8f2ff;border: 1px solid #B4D5FF;\">".
-								"<div class=\"center\" style=\"width:30px; float:left;\">".($i+1)."</div>".
-								"<div class=\"center\" style=\"float:left;border-left: 1px solid #dddddd;border-right:1px solid #dddddd; width:730px;\">".$result[$i]['title']."</div>".
-								"<div class=\"center\" style=\"float:left; width:50px;\"><a href=\"javascript:;\" class=\"zhankai\">展开</a>".
-								"</div>".
-								"<div class=\"center\" style=\"float:left; width:50px;border-left: 1px solid #dddddd;\"><a href=\"javascript:;\" class=\"delete\" style=\" \">删除</a>".
-								"</div>".
-							"</div>";
-						$arr=explode("mark", $result[$i]['mark']);
-						$count=count($arr);
-						echo "<div class=\"mark\" style=\"display:none;\">";
-						$j=1;
-						while ($j <= $count-1) {
-							# code...
-							echo "<div class=\"span17 border\" style=\"margin-top:2px;width:870px;\">".$arr[$j]."</div>";
-							$j++;
+			<div style="width:1092px;margin:0 auto;border-width:thin;border:1px solid #dddddd; padding:10px;">
+				<table class="table">
+					<?php
+						$result_page=$operatedb->Execsql("select count(*) from aftersale where uID='".$uID."'",$conn);
+						$itemNum=($pageNo-1)*20;
+						$lastPage=ceil($result_page[0][0]/20);
+						$total_result=$result_page[0][0];
+						if ($pageNo<$lastPage) {
+							$per=19;
+						}elseif ($pageNo==$lastPage) {
+							$per=$total_result-($pageNo-1)*20-1;
+						}elseif ($lastPage==0) {
+							$per=-1;
 						}
-						echo "<div class=\"span17\"><input type=\"text\" style=\"display:none;\"><a href=\"javascript:;\" class=\"addmark\">添加新记录</a></div>";
-						echo "</div>";
-						$i++;
-					}
-					echo "<div class=\"span17 border\" style=\"margin-top:5px;width:870px;\"><input tpye=\"text\" style=\"display:none;\"><a href=\"javascript:;\" id=\"addmark\">添加新的线下售后</a><div>";
-				?>
+						$result=$operatedb->Execsql("select * from aftersale where uID='".$uID."'",$conn);
+						$i=0;
+						while ($i <= $per) {
+							$resp=getInfoById($result[$i]['title']);
+							drawBody($resp);
+							drawTable($result[$i]['mark']);
+							
+							$i++;
+						}
+					?>
+			    </table>
 			</div>
 		</div>
 	</div>
+<div class="row" style="float:right;padding-right:35px;">
+<?php
+ 	$total=$result_page[0][0];
+ 	if ($total>=200) {
+ 		# code...
+ 		$total=200;
+ 	}
+ 	$page=new Fenye($total,20,'aftersale.php');
+ 	$page->showFenye($pageNo);
+?>
+</div>
 </body>
 </html>

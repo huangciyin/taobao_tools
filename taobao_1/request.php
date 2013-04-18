@@ -17,7 +17,7 @@
 				$i=1;
 				while ($i <= $pageCount) {
 					# code...
-					$response=get_url_content("http://localhost/sandbox/db.php?type=order&pageNo=".$i."");
+					$response=get_url_content("http://localhost/db.php?type=order&pageNo=".$i."");
 					$i++;
 				}
 			}elseif ($type=='refund') {
@@ -31,22 +31,23 @@
 				$i=1;
 				while ($i <= $pageCount) {
 					# code...
-					$response=get_url_content("http://localhost/sandbox/db.php?type=refund&pageNo=".$i."");
+					$response=get_url_content("http://localhost/db.php?type=refund&pageNo=".$i."");
 					$i++;
 				}
 			}elseif ($type=='stock') {
 				# code...
 				$req = new ItemsOnsaleGetRequest;
-				$req->setFields("num_iid,num,outer_id");
+				$req->setFields("num_iid,num");
 				$resp = $c->execute($req, $sessionKey);
 
 				$pageCount=ceil($resp->total_results/40);
 				$i=1;
 				while ($i <= $pageCount) {
 					# code...
-					$response=get_url_content("http://localhost/sandbox/db.php?type=stock&pageNo=".$i."");
+					$response=get_url_content("http://localhost/db.php?type=stock&pageNo=".$i."");
 					$i++;
 				}
+				$response=get_url_content("http://localhost/db.php?type=sku");
 			}
 		}
 	}

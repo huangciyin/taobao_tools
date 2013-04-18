@@ -15,6 +15,16 @@
 	$pagenum=($pageNo-1)*20;
 	$lastPage=ceil($result_page[0][0]/20);
 
+	
+	function getInfoById($id){
+		require_once 'config.php';
+		global $sessionKey,$appkey,$secretKey,$format,$c;
+		$req = new RefundGetRequest;
+		$req->setFields("created,title,reason,refund_id,tid");
+		$req->setRefundId($id);
+		$resp=$c->execute($req,$sessionKey);
+		return $resp;
+	}
 
 ?>
 <html>
@@ -52,23 +62,25 @@ tbody{
 </head>
 <body>
 	<div class="container">
-		<div class="row">
-			<div style="height:100px;"></div>
+		<div class="row" style="margin-bottom:1px;">
+			<div style="height:170px;"><?php include 'top.html';?></div>
 		</div>
 		<div class="row">
 			<?php include 'leftside.html';?>
-			<div class="span18" style="border-width:thin;border:1px solid #dddddd; padding:10px;">
+			<div style="width:1092px;margin:0 auto;border-width:thin;border:1px solid #dddddd; padding:10px;">
 				<table class="table table-bordered table-condensed" style="margin-top: 10px;">
 					<colgroup>
 		                <col class="span2"></col>
-		                <col class="span5"></col>
 		                <col class="span2"></col>
+		                <col class="span3"></col>
+		                <col class="span3"></col>
 						<col class="span2"></col>
 						<col class="span2"></col>
             		</colgroup>
 					<thead>
 						<tr>
 							<th>退款编号</th>
+							<th>订单编号</th>
 							<th>物品名称</th>
 							<th>退款原因</th>
 							<th>申请时间</th>
@@ -78,28 +90,22 @@ tbody{
 					<tbody>
 						<?php
 							$result=$operatedb->Execsql("select * from refundlist where uID='".$uID."' limit ".$pagenum.",20",$conn);
-							// $per = (( $pageNo == $lastPage) ? $result_page[0][0]%20-1 : 19);
 							if ($pageNo<$lastPage) {
-								# code...
 								$per=19;
 							}elseif ($pageNo==$lastPage) {
-								# code...
 								$per=$result_page[0][0]-($pageNo-1)*20-1;
 							}elseif ($lastPage==0) {
-								# code...
 								$per=-1;
 							}
 							$i=0;
 							while ($i <= $per) {
 								# code...
+								$resp=getInfoById($result[$i]['refundID']);
 								echo "<tr>";
-								echo "<td>".$result[$i]['refundID']."</td>";
-								$req = new RefundGetRequest;
-								$req->setFields("created,title,reason");
-								$req->setRefundId($result[$i]['refundID']);
-								$resp=$c->execute($req,$sessionKey);
-								echo "<td>".$resp->refund->title."</td>";
-								echo "<td>".$resp->refund->reason."</td>";
+								echo "<td>".$resp->refund->refund_id."</td>";
+								echo "<td>".$resp->refund->tid."</td>";
+								echo "<td>".@$resp->refund->title."</td>";
+								echo "<td>".@$resp->refund->reason."</td>";
 								echo "<td>".$resp->refund->created."</td>";
 								echo "<td><a href=\"http://mai.taobao.com\" class=\"detele\" target=\"_blank\">进入淘宝处理</a></td>";
 								echo "</tr>";

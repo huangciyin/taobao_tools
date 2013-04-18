@@ -53,7 +53,7 @@
 				$time=date("Y-m-d H:i:s",time()-30*24*60*60);
 			}
 
-			$arrOrder=array('uID','tID','created','printStatus');
+			$arrOrder=array('uID','tID','created','printStatus','expressNum');
 			$j=0;
 			while ($j <= $total) {
 				# code...
@@ -61,7 +61,7 @@
 				$created=$resp->trades->trade[$j]->created;
 				if (date("Y-m-d H:i:s",strtotime($created))>date("Y-m-d H:i:s",strtotime($time))) {
 					# code...
-					$strOrder=sprintf("insert into %s(%s) values ('%s','%s','%s','')",'orders',implode(',', $arrOrder),$uID,$tID,$created);
+					$strOrder=sprintf("insert into %s(%s) values ('%s','%s','%s','','')",'orders',implode(',', $arrOrder),$uID,$tID,$created);
 					$result_insert=$operatedb->Execsql($strOrder,$conn);
 					$j++;
 				}else{

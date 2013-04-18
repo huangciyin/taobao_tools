@@ -14,39 +14,61 @@
 	while ($i <= count($num_iid)-1) {
 		$stock=$operatedb->Execsql("select count(*) from sku where num_iid='".$num_iid[$i]['numID']."' and stock<warn",$conn);
 		$hurry=$operatedb->Execsql("select count(*) from sku where num_iid='".$num_iid[$i]['numID']."' and stock<0",$conn);
-		$total_hurry+=$hurry[0][0];
-		$total_stock+=$stock[0][0];
+		@$total_hurry+=$hurry[0][0];
+		@$total_stock+=$stock[0][0];
 		$i++;
 	}
 
 	$unprint=$operatedb->Execsql("select count(*) from orders where uID='".$uID."' and printStatus=''",$conn);
 	$refund=$operatedb->Execsql("select count(*) from refundlist where uID='".$uID."'",$conn);
-	// $stock=
-	$printed=$operatedb->Execsql("select count(*) from orders where tID='".$tID."' and printStatus='printed'",$conn);
+	$printed=$operatedb->Execsql("select count(*) from orders where uID='".$uID."' and printStatus='printed'",$conn);
 ?>
-<div style="border-width:thin;border:1px solid #dddddd;background-color:#f2f8fa;margin-left:60px;height:100px; width:1112px;">
+<div style="background-color:#f2f8fa;margin:0 auto;height:170px; width:1114px;">
+	<div style="border-width:thin;border:1px solid #dddddd;">
+	<div style="height:20px;"></div>
 	<div id="id1">
-		<div style="float:left;height:40px;width:100px;"></div>
+		<div style="float:left;height:40px;width:250px;"></div>
 		<div style="float:left;height:40px;width:221px;background-image: url(source/logos/logo.png);"></div>
+		<div style="float:left;height:40px;width:330px;line-height:40px;margin-left:20px;">
+			<form class="form-inline" method="post" action="index.php" style="float:left;">
+				<input type="text" class="span6" id="content" placeholder="姓名 手机号码 收货地址 交易编号 运单号" name="search" >
+				<input type="submit" value="查询">
+			</form>
+		</div>
 	</div>
-	<div id="id2">
-		<div id="id3"></div>
-		<div id="id4"><div style="height:18px;width:178px;"><img src="source/logos/icon_bad.png"><?php echo $neutral;?>个差评生效中</div><div style="height:18px;width:178px;"><img src="source/logos/icon_middle.png"><?php echo $bad;?>个中评生效中</div></div>
-		<div id="id4"><div style="height:18px;width:178px;"><img src="source/logos/icon_print.png"><?php echo $unprint[0][0];?>个订单待打印</div><div style="height:18px;width:178px;"><img src="source/logos/print_car.png"><?php echo $printed[0][0];?>个订单待发货</div></div>
-		<div id="id4"><div style="height:18px;width:178px;"><img src="source/logos/print_goods_blue.png"><?php echo $total_hurry;?>个紧急补货</div><div style="height:18px;width:178px;"><img src="source/logos/print_goods_yellow.png"><?php echo $total_stock;?>个待进货</div></div>
-		<div id="id4"><div style="height:18px;width:178px;"><img src="source/logos/icon_aftersales.png"><?php echo $refund[0][0];?>个售后问题</div></div>
-		<div id="id3"></div>
+	<div style="height:20px;">
+
 	</div>
+	</div>
+	
+	<div style="height:30px;border:1px solid rgb(218,71,1);background-color: rgb(255,249,237);">
+		<div id="id7"><a href="">差评生效中</a>(<?php echo $bad;?>)</div>
+		<div id="id7"><a href="">中评生效中</a>(<?php echo $neutral;?>)</div>
+		<div id="id7"><a href="">待打印订单</a>(<?php echo $unprint[0][0];?>)</div>
+		<div id="id7"><a href="">待发货订单</a>(<?php echo $printed[0][0];?>)</div>
+		<div id="id7"><a href="">紧急补货</a>(<?php echo $total_hurry;?>)</div>
+		<div id="id7"><a href="">待进货</a>(<?php echo $total_stock;?>)</div>
+		<div id="id7"><a href="">售后问题</a>(<?php echo $refund[0][0];?>)</div>
+	</div>
+	<div style="height:30px;background-color:white;"></div>
+	<div id="id5">
+		<div id="id6"><a style="margin-left:9px;" href="index.php">订单查询</a></div>
+		<div id="id6"><a style="margin-left:9px;" href="unprint.php">订单打印</a></div>
+		<div id="id6"><a style="margin-left:9px;" href="printed.php">发货管理</a></div>
+		<div id="id6"><a style="margin-left:9px;" href="sku.php">库存管理</a></div>
+		<div id="id6"><a style="margin-left:9px;" href="aftersale.php">售后管理</a></div>
+		<div id="id6"><a style="margin-left:9px;" href="refund.php">退货请求</a></div>
+	</div>
+	
 </div>
 <style type="text/css">
 #id1{
 	width: 1112px;
 	height: 40px;
-
 }
 #id2{
 	width: 1112px;
-	height: 60px;
+	height: 50px;
 }
 #id3{
 	width: 200px;
@@ -58,4 +80,31 @@
 	height: 60px;
 	float: left;
 }
+#id5{
+	width: 1112px;
+	height: 30px;
+	background-color:white;
+
+}
+#id6{
+	float:left;
+	height:30px;
+	width:100px;
+	font-size: 20px;
+	line-height: 30px;
+}
+#id7{
+	height: 30px;
+	line-height: 30px;
+	width: 150px;
+	text-align: center;
+	float: left;
+}
 </style>
+<script type="text/javascript">
+$(function(){
+	$("#id6").click(function(){
+		$(this).css("background-color","rgb(38, 122, 150)");
+	});
+});
+</script>

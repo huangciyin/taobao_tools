@@ -14,7 +14,26 @@
 	$pagenum=($pageNo-1)*20;
 	$lastPage=ceil($result_page[0][0]/20);
 
+	function getInfoById($tid){
+		require_once 'config.php';
+		global $sessionKey,$appkey,$secretKey,$format,$c;
+		$req = new TradeFullinfoGetRequest;
+		$req->setFields("tid,pic_path,created,status,receiver_name,receiver_state,receiver_city,receiver_district,receiver_address,receiver_mobile,orders.title,orders.num,buyer_memo,seller_memo");
+		$req->setTid($tid);
+		$resp = $c->execute($req, $sessionKey);
+		return $resp;
+	}
 
+	function drawBody($resp){
+		echo "<tr>";
+		echo "<td>".$resp->trade->tid."</td>";
+		echo "<td>".$resp->trade->receiver_name."</td>";
+		echo "<td>".$resp->trade->receiver_state.$resp->trade->receiver_city.$resp->trade->receiver_district.$resp->trade->receiver_address."</td>";
+		echo "<td>".@$resp->trade->receiver_mobile."</td>";
+		echo "<td><a href=\"javascript:void(0);\" class=\"opener\">重新打印</a></td>";
+		echo "<td><a href=\"javascript:void(0);\" class=\"send\">发货</a></td>";
+		echo "</tr>";
+	}
 ?>
 <html>
 <head>
@@ -55,23 +74,47 @@ tbody{
 
 
 	  });
+
+	  $("#dialog-express").dialog({
+	  	autoOpen: false,
+	      height: 200,
+	      width: 350,
+	      modal: true,
+	       buttons: {
+	        "确定": function() {
+	        	if ($("#express").val()!='') {
+	        		var exp_num=$("#express").val();
+	        		var url=surl+"&exp_num="+exp_num;
+	        		$.get(url);
+	        		$( this ).dialog( "close" );
+	        	}else{
+
+	        	};
+	        },
+	        "取消": function() {
+	          $( this ).dialog( "close" );
+	        }
+      }
+	  });
 	  $(".send").click(function(){
+	  	
 	  	var sid=$(this).parent().parent().children("td:eq(0)").html();
-	  	var surl="print.php?send="+sid;
-	  	$.get(surl);
-	  	$(this).html("已发货");
+	  	window.surl="print.php?send="+sid;
+	  	$("#dialog-express").dialog("open");
+	  	
+	  	
 	  });
 	});
 </script>
 </head>
 <body>
 	<div class="container">
-		<div class="row">
-			<div style="height:100px;"></div>
+		<div class="row" style="margin-bottom:1px;">
+			<div style="height:170px;"><?php include 'top.html';?></div>
 		</div>
 		<div class="row">
 			<?php include 'leftside.html';?>
-			<div class="span18" style="border-width:thin;border:1px solid #dddddd; padding:10px;">
+			<div style="width:1092px;margin:0 auto;border-width:thin;border:1px solid #dddddd; padding:10px;">
 				<table class="table table-bordered table-condensed" style="margin-top: 7px;">
 					<colgroup>
 		                <col class="span2"></col>
@@ -108,18 +151,8 @@ tbody{
 							$i=0;
 							while ($i <= $per) {
 								# code...
-								echo "<tr>";
-								echo "<td>".$result[$i]['tID']."</td>";
-								$req=new TradeFullinfoGetRequest;
-								$req->setFields("receiver_name,receiver_state,receiver_city,receiver_district,receiver_address,receiver_mobile");
-								$req->setTid($result[$i]['tID']);
-								$resp=$c->execute($req,$sessionKey);
-								echo "<td>".$resp->trade->receiver_name."</td>";
-								echo "<td>".$resp->trade->receiver_state.$resp->trade->receiver_city.$resp->trade->receiver_district.$resp->trade->receiver_address."</td>";
-								echo "<td>".$resp->trade->receiver_mobile."</td>";
-								echo "<td><a href=\"javascript:void(0);\" class=\"opener\">重新打印</a></td>";
-								echo "<td><a href=\"javascript:void(0);\" class=\"send\">发货</a></td>";
-								echo "</tr>";
+								$resp=getInfoById($result[$i]['tID']);
+								drawBody($resp);
 								$i++;
 							}
 						?>
@@ -140,5 +173,13 @@ tbody{
  ?>
 </div>
 <div id="dialog" title="快递详细"></div>
+<div id="dialog-express" title="请输入运单号">
+<form>
+  <fieldset>
+    <label for="express">运单号</label>
+    <input type="text" name="express" id="express"/>
+  </fieldset>
+  </form>
+</div>
 </body>
 </html>

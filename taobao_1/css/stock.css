@@ -15,8 +15,6 @@ tbody{
 	font: 12px/1.5 Tahoma,Helvetica,Arial,'宋体b8b\4f53',sans-serif;
 }
 img{
-	max-width: 50px;
-	max-height: 50px;
-	margin-top: 7px;
-	margin-left: 5px;
+	max-width: 300px;
+	max-height: 300px;
 }

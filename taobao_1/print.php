@@ -30,6 +30,7 @@
 		newwin.document.write("</head><body>");
 		newwin.document.write(content);
 		newwin.document.write("</body></html>");
+		
 
 		newwin.print();
 		newwin.close();
@@ -76,7 +77,7 @@ $(function(){
 			$result_minus=$operatedb->Execsql("update sku set stock=stock-1 where num_iid='".$resp->trade->num_iid."' and sku_id='".$sku_id."'",$conn);
 			$m++;
 		}
-		$result=$operatedb->Execsql("update orders set printStatus='sent' where tID='".$tID."'",$conn);
+		$result=$operatedb->Execsql("update orders set printStatus='sent',expressNum='".$_GET['exp_num']."' where tID='".$tID."'",$conn);
 	}elseif (isset($_GET['delete'])&&!empty($_GET['delete'])) {
 		# code...
 		$tID=$_GET['delete'];
@@ -105,9 +106,6 @@ $(function(){
 	}elseif (isset($_GET['deleterefund'])&&!empty($_GET['deleterefund'])) {
 		# code...
 		$result=$operatedb->Execsql("delete from refundlist where refundID='".$_GET['deleterefund']."'",$conn);
-	}elseif (isset($_GET['addaftersale'])&&!empty($_GET['addaftersale'])) {
-		# code...
-		$result=$operatedb->Execsql("insert into aftersale values ('','".$uID."','".$_GET['addaftersale']."','')",$conn);
 	}elseif (isset($_GET['deleteaftersale'])&&!empty($_GET['deleteaftersale'])) {
 		# code...
 		$result=$operatedb->Execsql("delete from aftersale where uID='".$uID."' and title='".$_GET['deleteaftersale']."'",$conn);

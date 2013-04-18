@@ -1,16 +1,14 @@
 .table{
-	width: 889px;
-	margin-top: 10px;
+	width: 1092px;
+	margin: 0 auto;
 
 }
 .tr-head{
 	color: #404040; 
 	background: #e8f2ff;
 	border: 1px solid #B4D5FF;
-}
-.div-tid{
-	text-align:left;
-	float:left;
+	
+
 }
 .div-goods{
 	height:65px;
@@ -23,7 +21,7 @@
 	border-top: transparent;
 }
 .tr-body{
-	width: 890px;
+	width: 1090px;
 	float: left;
 }
 .div-address{
@@ -41,9 +39,10 @@
 	margin-left: 5px;
 }
 .div-status{
-	width:70px;
+	width:100px;
 	height:65px;
 	overflow:hidden;
+	border-right:1px solid #B4D5FF;
 	margin-right: 5px;
 	margin-left: 5px;
 }
@@ -61,17 +60,23 @@
 	margin-right: 5px;
 }
 .div-name{
-	width:60px;
+	width:100px;
 	height:65px;
 	overflow:hidden;
 	border-right:1px solid #B4D5FF;
 	margin-left: 5px;
 }
 .div-mobile{
-	width:80px;
+	width:100px;
 	height:65px;
 	overflow:hidden;
 	border-right:1px solid #B4D5FF;
+	margin-left: 5px;
+}
+.div-active{
+	width:120px;
+	height:65px;
+	overflow:hidden;
 	margin-left: 5px;
 }
 li{
