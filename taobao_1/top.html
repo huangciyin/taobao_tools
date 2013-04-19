@@ -22,6 +22,11 @@
 	$unprint=$operatedb->Execsql("select count(*) from orders where uID='".$uID."' and printStatus=''",$conn);
 	$refund=$operatedb->Execsql("select count(*) from refundlist where uID='".$uID."'",$conn);
 	$printed=$operatedb->Execsql("select count(*) from orders where uID='".$uID."' and printStatus='printed'",$conn);
+
+	function getPageUrl()
+	{
+
+	}
 ?>
 <div style="background-color:#f2f8fa;margin:0 auto;height:170px; width:1114px;">
 	<div style="border-width:thin;border:1px solid #dddddd;">
@@ -29,35 +34,35 @@
 	<div id="id1">
 		<div style="float:left;height:40px;width:250px;"></div>
 		<div style="float:left;height:40px;width:221px;background-image: url(source/logos/logo.png);"></div>
-		<div style="float:left;height:40px;width:330px;line-height:40px;margin-left:20px;">
+		<div style="float:left;height:40px;width:370px;line-height:40px;margin-left:20px;">
 			<form class="form-inline" method="post" action="index.php" style="float:left;">
 				<input type="text" class="span6" id="content" placeholder="姓名 手机号码 收货地址 交易编号 运单号" name="search" >
-				<input type="submit" value="查询">
+				<button id="search_btn">查询</button>
 			</form>
 		</div>
 	</div>
 	<div style="height:20px;">
-
+		<div style="height:20px;line-height:20px;float:right;">客服QQ群：301599722&nbsp;</div>
 	</div>
 	</div>
 	
 	<div style="height:30px;border:1px solid rgb(218,71,1);background-color: rgb(255,249,237);">
-		<div id="id7"><a href="">差评生效中</a>(<?php echo $bad;?>)</div>
-		<div id="id7"><a href="">中评生效中</a>(<?php echo $neutral;?>)</div>
-		<div id="id7"><a href="">待打印订单</a>(<?php echo $unprint[0][0];?>)</div>
-		<div id="id7"><a href="">待发货订单</a>(<?php echo $printed[0][0];?>)</div>
-		<div id="id7"><a href="">紧急补货</a>(<?php echo $total_hurry;?>)</div>
-		<div id="id7"><a href="">待进货</a>(<?php echo $total_stock;?>)</div>
-		<div id="id7"><a href="">售后问题</a>(<?php echo $refund[0][0];?>)</div>
+		<div class="id7"><a href="http://rate.taobao.com/user-myrate-1025957287--banner%7C1--detailed%7C1--goodNeutralOrBad%7C-1--timeLine%7C-210--receivedOrPosted%7C0--buyerOrSeller%7C0.htm?spm=a1z0b.3.0.99.FkIqV1#rateList">差评生效中</a>(<?php echo $bad;?>)</div>
+		<div class="id7"><a href="http://rate.taobao.com/user-myrate-1025957287--banner%7C1--detailed%7C1--goodNeutralOrBad%7C0--timeLine%7C-30--receivedOrPosted%7C0--buyerOrSeller%7C0.htm?spm=a1z0b.3.0.94.FkIqV1#rateList">中评生效中</a>(<?php echo $neutral;?>)</div>
+		<div class="id7"><a href="unprint.php">待打印订单</a>(<?php echo $unprint[0][0];?>)</div>
+		<div class="id7"><a href="printed.php">待发货订单</a>(<?php echo $printed[0][0];?>)</div>
+		<div class="id7"><a href="sku.php">紧急补货</a>(<?php echo $total_hurry;?>)</div>
+		<div class="id7"><a href="sku.php">待进货</a>(<?php echo $total_stock;?>)</div>
+		<div class="id7"><a href="refund.php">售后问题</a>(<?php echo $refund[0][0];?>)</div>
 	</div>
 	<div style="height:30px;background-color:white;"></div>
 	<div id="id5">
-		<div id="id6"><a style="margin-left:9px;" href="index.php">订单查询</a></div>
-		<div id="id6"><a style="margin-left:9px;" href="unprint.php">订单打印</a></div>
-		<div id="id6"><a style="margin-left:9px;" href="printed.php">发货管理</a></div>
-		<div id="id6"><a style="margin-left:9px;" href="sku.php">库存管理</a></div>
-		<div id="id6"><a style="margin-left:9px;" href="aftersale.php">售后管理</a></div>
-		<div id="id6"><a style="margin-left:9px;" href="refund.php">退货请求</a></div>
+		<div class="id6 div-index"><a href="index.php">订单查询</a></div>
+		<div class="id6 div-unprint"><a href="unprint.php">订单打印</a></div>
+		<div class="id6 div-printed"><a href="printed.php">发货管理</a></div>
+		<div class="id6 div-sku"><a href="sku.php">库存管理</a></div>
+		<div class="id6 div-aftersale"><a href="aftersale.php">售后管理</a></div>
+		<div class="id6 div-refund"><a href="refund.php">退货请求</a></div>
 	</div>
 	
 </div>
@@ -86,14 +91,16 @@
 	background-color:white;
 
 }
-#id6{
+.id6{
 	float:left;
 	height:30px;
 	width:100px;
-	font-size: 20px;
+	font:normal 17px/1.5 'Tahoma','simsun';
 	line-height: 30px;
+	background-image: url(source/tab_white.png);
+	text-align: center;
 }
-#id7{
+.id7{
 	height: 30px;
 	line-height: 30px;
 	width: 150px;
@@ -102,9 +109,29 @@
 }
 </style>
 <script type="text/javascript">
-$(function(){
-	$("#id6").click(function(){
-		$(this).css("background-color","rgb(38, 122, 150)");
-	});
-});
+var page="<?php echo curPageURL();?>";
+switch(page)
+{
+
+	case "/index.php":
+		$(".div-index").css("background-image","url(source/tab_blue.png)");
+		break;
+	case "/unprint.php":
+		$(".div-unprint").css("background-image","url(source/tab_blue.png)");
+		break;
+	case "/printed.php":		
+		$(".div-printed").css("background-image","url(source/tab_blue.png)");
+		break;
+	case "/refund.php":
+		$(".div-refund").css("background-image","url(source/tab_blue.png)");
+		break;
+	case "/sku.php":
+		$(".div-sku").css("background-image","url(source/tab_blue.png)");
+		break;
+	case "/aftersale.php":
+		$(".div-aftersale").css("background-image","url(source/tab_blue.png)");
+		break;
+	default:
+		$(".div-index").css("background-image","url(source/tab_blue.png)");
+}
 </script>

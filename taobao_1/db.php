@@ -3,7 +3,6 @@
 	require 'conndb.inc.php';
 	require_once 'config.php';
 
-
 	if (!empty($uID)) {
 		# code...
 		$result=$operatedb->Execsql("select * from user where uID=".$uID."",$conn);

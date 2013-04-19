@@ -1,17 +1,17 @@
 <?php
+	// error_reporting(0);
+	session_start();
+
 	include 'TopSdk.php';
 	require_once 'function.php';
 	require_once 'page.class.php';
 
-
-	$sessionKey="61003181ca0b393ce04e1859f812d517de225e365dd29872054718218";
+	@$sessionKey=$_SESSION['topsession'];
 	$appkey="1021409528";
 	$secretKey="sandbox31b961e472f864b1c17ebd4ba";
+	// $appkey="21471780";
+	// $secretKey="e6cb3726906df8959625196a4909ff95";
 	$format="json";
-	if (isset($_GET['top_session'])&&!empty($_GET['top_session'])) {
-		# code...
-		$sessionKey=$_GET['top_session'];
-	}
 
 	$c=new TopClient;
 	$c->appkey=$appkey;
@@ -22,5 +22,7 @@
 	$user_req->setFields("user_id");
 	$user_resp = $c->execute($user_req, $sessionKey);
 	$uID=$user_resp->user->user_id;
+	
+
 
 ?>

@@ -52,7 +52,7 @@
 					}
 					return $arr;
 
-				}elseif (strlen($search)==$len) {
+				}elseif (strlen($search)==$len_tid) {
 					# code...tid
 					$result_page=$operatedb->Execsql("select count(uID) from orders where uID='".$uID."'",$conn);
 					$pageCount=ceil($result_page[0][0]/40);
