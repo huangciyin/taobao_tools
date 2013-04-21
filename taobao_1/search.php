@@ -1,6 +1,8 @@
 <?php
 	function search($search){
 		require_once 'config.php';
+		$sessionKey=$_COOKIE['sessionKey'];
+		$uID=$_COOKIE['uID'];
 		global $sessionKey,$appkey,$secretKey,$format,$c,$operatedb,$uID,$conn;
 
 
@@ -52,7 +54,7 @@
 					}
 					return $arr;
 
-				}elseif (strlen($search)==$len_tid) {
+				}elseif (strlen($search)==$len) {
 					# code...tid
 					$result_page=$operatedb->Execsql("select count(uID) from orders where uID='".$uID."'",$conn);
 					$pageCount=ceil($result_page[0][0]/40);

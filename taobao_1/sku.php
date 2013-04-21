@@ -1,9 +1,9 @@
 <?php
-
-
-	header("Content-type:text/html;charset=utf-8");
 	require "conndb.inc.php";
 	require_once 'config.php';
+	$sessionKey=$_COOKIE['sessionKey'];
+	$uID=$_COOKIE['uID'];
+	
 	require_once 'request.php';
 	getData('stock');
 
@@ -36,7 +36,7 @@
 					$sku_id=$resp->item->skus->sku[0]->sku_id;
 					$result_sku=$operatedb->Execsql("select * from sku where num_iid='".$resp->item->num_iid."' and sku_id='".$sku_id."'",$conn);
 					$arr=split(":", $prop);
-					@$str=$arr[2].":".$arr[3];
+					$str=$arr[2].":".$arr[3];
 					echo "<div class=\"list-item\"><span style=\"display:inline-block;width:580px;\">".$str."</span><span style=\"display:inline-block;width:100px;\">".$resp->item->skus->sku[0]->quantity."</span><span style=\"display:inline-block;width:100px;\">".$result_sku[0]['stock']."</span><span style=\"display:inline-block;width:100px;\">设置预警库存</span></div>";
 				}elseif ($skuscount>1) {
 					# code...
@@ -49,7 +49,7 @@
 					while ($r <= $count-1) {
 						# code...
 						$str1=split(":", $arr[$r]);
-						@$str.=$str1[2].":".$str1[3];
+						$str.=$str1[2].":".$str1[3];
 						$r++;
 					}
 					echo "<div class=\"list-item\"><span style=\"display:inline-block;width:500px;\">".$str."</span><span style=\"display:inline-block;width:80px;\">".$sku_id."</span><span style=\"display:inline-block;width:100px;text-align:center;\">".$resp->item->skus->sku[0]->quantity."</span><span style=\"display:inline-block;width:100px;text-align:center;\" class=\"stock\"><input type=\"text\" style=\"display:none;\"><a href=\"javascript:;\">".$result_sku[0]['stock']."</a></span><span class=\"warn\" style=\"display:inline-block;width:100px;text-align:center;\"><input type=\"text\" style=\"display:none;\"><a href=\"javascript:;\">".$result_sku[0]['warn']."</a></span></div>";
@@ -152,7 +152,7 @@ $(document).ready(function(){
 	  	var img=$("<img>");
 	  	$(this).before(img);
 	  	$(this).prev().attr("src",url);
-	  	$(this).prev().css({"z-index":"5009","position":"fixed","max-height":"200px","max-width":"200px"});
+	  	$(this).prev().css({"z-index":"5009","position":"fixed"});
 
 
 	  });
@@ -164,12 +164,12 @@ $(document).ready(function(){
 </head>
 <body>
 	<div class="container">
-		<div class="row">
+		<div class="row" style="margin-bottom:1px;">
 			<div style="height:170px;"><?php include 'top.html';?></div>
 		</div>
 		<div class="row">
 			<?php include 'leftside.html';?>
-			<div style="width:1114px;margin:0 auto;">
+			<div style="width:1092px;margin:0 auto;border-width:thin;border:1px solid #dddddd; padding:10px;">
 				<?php
 					$result=$operatedb->Execsql("select * from stocklist where uID='".$uID."' limit ".$pagenum.",20",$conn);
 					if ($pageNo<$lastPage) {
@@ -197,9 +197,14 @@ $(document).ready(function(){
 	</div>
 <div class="row" style="float:right;padding-right:35px;">
 <?php
- 	$page=new Fenye($result_page[0][0],20,'sku.php');
+ 	$total=$result_page[0][0];
+ 	if ($total>=200) {
+ 		# code...
+ 		$total=200;
+ 	}
+ 	$page=new Fenye($total,20,'sku.php');
  	$page->showFenye($pageNo);
-?>
+ ?>
 </div>
 </body>
 </html>

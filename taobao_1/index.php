@@ -1,7 +1,9 @@
 <?php
-	header("Content-type:text/html;charset=utf-8");
-	require_once "conndb.inc.php";
 	require_once 'config.php';
+	require_once "conndb.inc.php";
+	$sessionKey=$_COOKIE['sessionKey'];
+	$uID=$_COOKIE['uID'];
+	
 	require_once 'request.php';
 	getData('order');
 
@@ -24,6 +26,7 @@
 	}
 	function drawBody($resp){
 		echo "<tbody class=\"table\">";
+		echo "<tr style=\"height:8px;\"><td></td></tr>";
 		echo "<tr class=\"tr-head\">";
 		$goodscount=count($resp->trade->orders->order)-1;
 		$m=0;
@@ -32,7 +35,7 @@
 		@$goods.=$resp->trade->orders->order[$m]->title." X ".$resp->trade->orders->order[$m]->num;
 		$m++;
 		}
-		echo "<td><span style=\"display:inline-block;width:200px;\"><label style=\"margin-bottom:0px;\">订单编号：<a href=\"http://trade.taobao.com/trade/detail/trade_item_detail.htm?spm=a1z09.1.11.16.CRSBK5&bizOrderId=".$resp->trade->tid."\" class=\"opener\" target=\"_blank\">".$resp->trade->tid."</a></label></span><span>成交时间：".$resp->trade->created."</span></td></tr>";
+		echo "<td><span style=\"display:inline-block;width:200px;\"><label style=\"margin-bottom:0px;\">订单编号：<a href=\"javascript:void(0);\" class=\"opener\">".$resp->trade->tid."</a></label></span><span>成交时间：".$resp->trade->created."</span></td></tr>";
 		echo "<tr class=\"tr-body border-no-top\">";
 		echo "<td><div class=\"div-goods\"><div class=\"div-img\"><img src=\"".$resp->trade->pic_path."\"></div><div class=\"div-goods-name\">".$goods."</div></div></td>";
 		echo "<td><div class=\"div-name\">".$resp->trade->receiver_name."</div></td>";
@@ -44,7 +47,6 @@
 		echo "<td><div class=\"div-active\">".checkAftersale($resp->trade->tid)."</div></td>";
 		echo "<td><div class=\"div-mark\">".drawTable($resp->trade->tid)."</div></td>";
 		echo "</tr>";
-		echo "<tr style=\"height:8px;\"><td></td></tr>";
 		echo "</tbody>";
 		$goods="";
 	}
@@ -53,15 +55,11 @@
 		global $operatedb,$uID,$conn;
 		$select=$operatedb->Execsql("select * from aftersale where title='".$tid."' and uID='".$uID."'",$conn);
 		if ($select==true) {
-			if ($select[0]['status']=='open') {
-				$result="已添加售后<br><a class=\"closeaftersale\" href=\"javascript:;\">关闭售后</a>";
-				return $result;
-			}elseif ($select[0]['status']=='close') {
-				$result="已关闭";
-				return $result;
-			}
+			# code...
+			$result="已添加售后<br><a class=\"deteleaftersale\" href=\"javascript:;\">关闭售后</a>";
+			return $result;
 		}else{
-			$result="<a class=\"aftersale\" href=\"javascript:;\">添加线下售后</a>";
+			$result="<a class=\"aftersale\" href=\"javascript:;\">线下售后</a>";
 			return $result;
 		}
 	}
@@ -71,29 +69,17 @@
 		global $operatedb,$uID,$conn;
 		$select=$operatedb->Execsql("select * from aftersale where title='".$tid."' and uID='".$uID."'",$conn);
 		if ($select==true) {
-			if ($select[0]['status']=='open') {
-				$arr=explode("mark", $select[0]['mark']);
-				$count=count($arr);
-				$j=1;
-				while ($j <= $count-1) {
-					@$str.= "<div style=\"height:15px;width:169px;overflow:hidden; border-bottom: 1px solid #B4D5FF;\">备注".$j.":".$arr[$j]."</div>";
-					$j++;
-				}
-				return @$str."<div style=\"height:20px;width:169px;overflow:hidden; border-bottom: 1px solid #B4D5FF;\"><input type=\"text\" style=\"display:none;height:20px;width:100px;\"><a href=\"javascript:;\" class=\"addmark\">添加新记录</a></div>";
-			}elseif ($select[0]['status']=='close') {
-				$arr=explode("mark", $select[0]['mark']);
-				$count=count($arr);
-				$j=1;
-				while ($j <= $count-1) {
-					@$str.= "<div style=\"height:15px;width:169px;overflow:hidden; border-bottom: 1px solid #B4D5FF;\">备注".$j.":".$arr[$j]."</div>";
-					$j++;
-				}
-				return @$str;
+			$arr=explode("mark", $select[0]['mark']);
+			$count=count($arr);
+			$j=1;
+			while ($j <= $count-1) {
+				$str.= "<div style=\"height:16px;width:140px;overflow:hidden; border-bottom: 1px solid #B4D5FF;\">备注".$j.":".$arr[$j]."</div>";
+				$j++;
 			}
-			
-		}else{
-			return "<div style=\" display:none;height:20px;width:169px;overflow:hidden; border-bottom: 1px solid #B4D5FF;\"><input type=\"text\" style=\"display:none;height:20px;width:100px;\"><a href=\"javascript:;\" class=\"addmark\">添加新记录</a></div>";
+			return $str."<div style=\"height:20px;width:140px;overflow:hidden; border-bottom: 1px solid #B4D5FF;\"><input type=\"text\" style=\"display:none;height:20px;width:100px;\"><a href=\"javascript:;\" class=\"addmark\">添加新记录</a></div>";
 		}
+		
+
 	}
 ?>
 <html>
@@ -113,7 +99,7 @@
 	    width:620
 	  });
 
-	  $( "#opener" ).click(function() {
+	  $( ".opener" ).click(function() {
 	  	var tid=$(this).html();
 	  	var url="detail.php?tid="+tid;
 
@@ -150,16 +136,14 @@ $(function(){
 $(function(){
 	$(".aftersale").click(function(){
 		var tID=$(this).parent().parent().parent().prev().find("a:eq(0)").text();
-		$(this).parent().parent().next().find("div:eq(1)").css("display","");
 		var url="print.php?addaftersale="+tID;
-		$(this).text("已添加");
+		$(this).text("已添加至线下售后");
 		$.get(url);
 	});
-	$(".closeaftersale").click(function(){
+	$(".deteleaftersale").click(function(){
 		var tID=$(this).parent().parent().parent().prev().find("a:eq(0)").text();
-		$(this).parent().parent().next().find("a:eq(0)").remove();
-		$(this).parent().text("已关闭");
-		var url="print.php?closeaftersale="+tID;
+		var url="print.php?deleteaftersale="+tID;
+		$(this).parent().text("已删除");
 		$.get(url);
 	});
 	$(".addmark").click(function(){
@@ -186,12 +170,12 @@ $(function(){
 </head>
 <body>
 	<div class="container">
-		<div class="row">
+		<div class="row" style="margin-bottom:1px;">
 			<div style="height:170px;"><?php include 'top.html';?></div>
 		</div>
 		<div class="row">
 			<?php include 'leftside.html';?>
-			<div style="width:1114px;margin:0 auto;">
+			<div style="width:1092px;margin:0 auto;border-width:thin;border:1px solid #dddddd; padding:10px;">
 				<table class="table">
 					<?php
 						if (isset($_POST['search'])&&!empty($_POST['search'])) {
@@ -233,9 +217,14 @@ $(function(){
 	</div>
 <div class="row" style="float:right;padding-right:35px;">
 <?php
- 	$page=new Fenye($result_page[0][0],20,'index.php');
+ 	$total=$result_page[0][0];
+ 	if ($total>=200) {
+ 		# code...
+ 		$total=200;
+ 	}
+ 	$page=new Fenye($total,20,'index.php');
  	$page->showFenye($pageNo);
-?>
+ ?>
 </div>
 <div id="dialog" title="订单详情"></div>
 <div id="searchdialog" title="查询结果"></div>

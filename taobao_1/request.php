@@ -1,6 +1,8 @@
-<?php	
+<?php
 	function getData($type){
 		require_once 'config.php';
+		$sessionKey=$_COOKIE['sessionKey'];
+		$uID=$_COOKIE['uID'];
 		global $sessionKey,$appkey,$secretKey,$format,$c;
 		
 
@@ -17,7 +19,7 @@
 				$i=1;
 				while ($i <= $pageCount) {
 					# code...
-					$response=get_url_content("http://".$_SERVER["SERVER_NAME"]."/db.php?type=order&pageNo=".$i."");
+					$response=get_url_content("http://localhost/db.php?type=order&pageNo=".$i."&sessionKey=".$sessionKey."&uID=".$uID."");
 					$i++;
 				}
 			}elseif ($type=='refund') {
@@ -31,7 +33,7 @@
 				$i=1;
 				while ($i <= $pageCount) {
 					# code...
-					$response=get_url_content("http://".$_SERVER["SERVER_NAME"]."/db.php?type=refund&pageNo=".$i."");
+					$response=get_url_content("http://localhost/db.php?type=refund&pageNo=".$i."&sessionKey=".$sessionKey."&uID=".$uID."");
 					$i++;
 				}
 			}elseif ($type=='stock') {
@@ -44,10 +46,10 @@
 				$i=1;
 				while ($i <= $pageCount) {
 					# code...
-					$response=get_url_content("http://".$_SERVER["SERVER_NAME"]."/db.php?type=stock&pageNo=".$i."");
+					$response=get_url_content("http://localhost/db.php?type=stock&pageNo=".$i."&sessionKey=".$sessionKey."&uID=".$uID."");
 					$i++;
 				}
-				$response=get_url_content("http://".$_SERVER["SERVER_NAME"]."/db.php?type=sku");
+				$response=get_url_content("http://localhost/db.php?type=sku&sessionKey=".$sessionKey."&uID=".$uID."");
 			}
 		}
 	}
