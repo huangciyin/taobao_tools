@@ -1,7 +1,8 @@
 <?php
-	header("Content-type:text/html;charset=utf-8");
 	require "conndb.inc.php";
 	require_once 'config.php';
+	$sessionKey=$_COOKIE['sessionKey'];
+	$uID=$_COOKIE['uID'];
 
 
 	$req = new TradeFullinfoGetRequest;
@@ -108,10 +109,10 @@ $(function(){
 		$result=$operatedb->Execsql("delete from refundlist where refundID='".$_GET['deleterefund']."'",$conn);
 	}elseif (isset($_GET['closeaftersale'])&&!empty($_GET['closeaftersale'])) {
 		# code...
-		$result=$operatedb->Execsql("update aftersale set status='close' where uID='".$uID."' and title='".$_GET['closeaftersale']."' and status='open'",$conn);
+		$result=$operatedb->Execsql("update aftersale set status='close' where uID='".$uID."' and title='".$_GET['closeaftersale']."'",$conn);
 	}elseif (isset($_GET['addmark'])&&!empty($_GET['addmark'])) {
 		# code...
-		$result=$operatedb->Execsql("update aftersale set mark=CONCAT(mark,'mark".$_GET['addmark']."') where uID='".$uID."' and title='".$_GET['title']."' and status='open'",$conn);
+		$result=$operatedb->Execsql("update aftersale set mark=CONCAT(mark,'mark".$_GET['addmark']."') where uID='".$uID."' and title='".$_GET['title']."'",$conn);
 	}elseif (isset($_GET['updatesku'])&&!empty($_GET['updatesku'])) {
 		# code...
 		$result=$operatedb->Execsql("update sku set stock='".$_GET['value']."' where num_iid='".$_GET['updatesku']."' and sku_id='".$_GET['sku']."'",$conn);

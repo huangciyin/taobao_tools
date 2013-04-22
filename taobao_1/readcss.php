@@ -1,8 +1,9 @@
 <?php
 
-	header("Content-type:text/html;charset=utf-8");
 	require "conndb.inc.php";
 	require_once 'config.php';
+	$sessionKey=$_COOKIE['sessionKey'];
+	$uID=$_COOKIE['uID'];
 
 	if (isset($_GET['customexpress1'])) {
 		# code...

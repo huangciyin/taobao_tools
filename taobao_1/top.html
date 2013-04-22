@@ -23,10 +23,6 @@
 	$refund=$operatedb->Execsql("select count(*) from refundlist where uID='".$uID."'",$conn);
 	$printed=$operatedb->Execsql("select count(*) from orders where uID='".$uID."' and printStatus='printed'",$conn);
 
-	function getPageUrl()
-	{
-
-	}
 ?>
 <div style="background-color:#f2f8fa;margin:0 auto;height:170px; width:1114px;">
 	<div style="border-width:thin;border:1px solid #dddddd;">
@@ -63,6 +59,8 @@
 		<div class="id6 div-sku"><a href="sku.php">库存管理</a></div>
 		<div class="id6 div-aftersale"><a href="aftersale.php">售后管理</a></div>
 		<div class="id6 div-refund"><a href="refund.php">退货请求</a></div>
+		<div id="setuser" class="id6"><a href="javascript:;">发件信息</a></div>
+		<div id="custom" class="id6"><a href="javascript:;">模板设置</a></div>
 	</div>
 	
 </div>

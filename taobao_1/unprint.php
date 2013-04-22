@@ -1,7 +1,8 @@
 <?php
-	header("Content-type:text/html;charset=utf-8");
 	require "conndb.inc.php";
 	require_once 'config.php';
+	$sessionKey=$_COOKIE['sessionKey'];
+	$uID=$_COOKIE['uID'];
 
 	$result_page=$operatedb->Execsql("select count(*) from orders where uID='".$uID."' and printStatus=''",$conn);
 	if (isset($_GET['pageNo'])&&!empty($_GET['pageNo'])) {

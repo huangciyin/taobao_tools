@@ -1,7 +1,9 @@
 <?php
-	header("Content-type:text/html;charset=utf-8");
-	require_once "conndb.inc.php";
 	require_once 'config.php';
+	require_once "conndb.inc.php";
+	$sessionKey=$_COOKIE['sessionKey'];
+	$uID=$_COOKIE['uID'];
+
 	require_once 'request.php';
 	getData('order');
 
@@ -172,7 +174,7 @@ $(function(){
 	  		if (markcontent!='') {
 	  			$(this).prev().css("display","none");
 	  			$(this).parent().before($("<div></div>").text(markcontent));
-	  			$(this).parent().prev().css({"height":"16px","width":"140px","overflow":"hidden", "border-bottom":"1px solid #B4D5FF"});
+	  			$(this).parent().prev().css({"height":"16px","width":"169px","overflow":"hidden", "border-bottom":"1px solid #B4D5FF"});
 	  			$(this).text("添加新记录");
 	  			var url="print.php?addmark="+markcontent+"&title="+title;
 	  			$.get(url);

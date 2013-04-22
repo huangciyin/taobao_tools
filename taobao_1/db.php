@@ -1,7 +1,8 @@
 <?php
-	header("Content-type:text/html;charset=utf-8");
-	require 'conndb.inc.php';
 	require_once 'config.php';
+	require 'conndb.inc.php';
+	$sessionKey=$_GET['sessionKey'];
+	$uID=$_GET['uID'];
 
 	if (!empty($uID)) {
 		# code...

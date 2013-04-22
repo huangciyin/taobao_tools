@@ -1,8 +1,9 @@
 <?php
 
-	header("Content-type:text/html;charset=utf-8");
 	require_once "conndb.inc.php";
 	require_once 'config.php';
+	$sessionKey=$_COOKIE['sessionKey'];
+	$uID=$_COOKIE['uID'];
 
 	if ( isset( $_GET['pageNo']) && !empty( $_GET['pageNo'])) {
 		$pageNo=$_GET['pageNo'];
@@ -47,22 +48,43 @@
 		$goods="";
 	}
 
-	function drawTable($content){
-		$arr=explode("mark", $content);
-		$count=count($arr);
-		echo "<tbody style=\"display:none;\">";
-		$j=1;
-		while ($j <= $count-1) {
-			echo "<tr style=\"border: 1px solid #B4D5FF;border-top: transparent;\">";
-			echo "<td>备注".$j.":".$arr[$j]."</td>";
-			echo "</tr>";
-			$j++;
+	function drawTable($tid){
+		require_once 'config.php';
+		global $operatedb,$uID,$conn;
+		$select=$operatedb->Execsql("select * from aftersale where title='".$tid."' and uID='".$uID."'",$conn);
+		if ($select==true) {
+			if ($select[0]['status']=="open") {
+				$arr=explode("mark", $select[0]['mark']);
+				$count=count($arr);
+				echo "<tbody style=\"display:none;\">";
+				$j=1;
+				while ($j <= $count-1) {
+					echo "<tr style=\"border: 1px solid #B4D5FF;border-top: transparent;\">";
+					echo "<td>备注".$j.":".$arr[$j]."</td>";
+					echo "</tr>";
+					$j++;
+				}
+				echo "<tr style=\"border: 1px solid #B4D5FF;border-top: transparent;\">";
+				echo "<td><input type=\"text\" style=\"display:none;\"><a href=\"javascript:;\" class=\"addmark\">添加新记录</a></td>";
+				echo "</tr>";
+				echo "</tbody>";
+			}else{
+				$arr=explode("mark", $select[0]['mark']);
+				$count=count($arr);
+				echo "<tbody style=\"display:none;\">";
+				$j=1;
+				while ($j <= $count-1) {
+					echo "<tr style=\"border: 1px solid #B4D5FF;border-top: transparent;\">";
+					echo "<td>备注".$j.":".$arr[$j]."</td>";
+					echo "</tr>";
+					$j++;
+				}
+				echo "<tr style=\"border: 1px solid #B4D5FF;border-top: transparent;\">";
+				// echo "<td><input type=\"text\" style=\"display:none;\"><a href=\"javascript:;\" class=\"addmark\">添加新记录</a></td>";
+				echo "</tr>";
+				echo "</tbody>";
+			}
 		}
-		echo "<tr style=\"border: 1px solid #B4D5FF;border-top: transparent;\">";
-		echo "<td><input type=\"text\" style=\"display:none;\"><a href=\"javascript:;\" class=\"addmark\">添加新记录</a></td>";
-		echo "</tr>";
-		echo "</tbody>";
-
 	}
 
 	function drawMark($tid){
@@ -70,14 +92,28 @@
 		global $operatedb,$uID,$conn;
 		$select=$operatedb->Execsql("select * from aftersale where title='".$tid."' and uID='".$uID."'",$conn);
 		if ($select==true) {
-			$arr=explode("mark", $select[0]['mark']);
-			$count=count($arr);
-			$j=1;
-			while ($j <= $count-1) {
-				@$str.= "<div style=\"height:15px;width:169px;overflow:hidden; border-bottom: 1px solid #B4D5FF;\">备注".$j.":".$arr[$j]."</div>";
-				$j++;
+			if ($select[0]['status']=='open') {
+				$arr=explode("mark", $select[0]['mark']);
+				$count=count($arr);
+				$j=1;
+				while ($j <= $count-1) {
+					@$str.= "<div style=\"height:15px;width:169px;overflow:hidden; border-bottom: 1px solid #B4D5FF;\">备注".$j.":".$arr[$j]."</div>";
+					$j++;
+				}
+				return @$str."<div style=\"height:20px;width:169px;overflow:hidden; border-bottom: 1px solid #B4D5FF;\"><input type=\"text\" style=\"display:none;height:20px;width:100px;\"><a href=\"javascript:;\" class=\"addmark\">添加新记录</a></div>";
+			}elseif ($select[0]['status']=='close') {
+				$arr=explode("mark", $select[0]['mark']);
+				$count=count($arr);
+				$j=1;
+				while ($j <= $count-1) {
+					@$str.= "<div style=\"height:15px;width:169px;overflow:hidden; border-bottom: 1px solid #B4D5FF;\">备注".$j.":".$arr[$j]."</div>";
+					$j++;
+				}
+				return @$str;
 			}
-			return @$str."<div style=\"height:20px;width:169px;overflow:hidden; border-bottom: 1px solid #B4D5FF;\"><input type=\"text\" style=\"display:none;height:20px;width:100px;\"><a href=\"javascript:;\" class=\"addmark\">添加新记录</a></div>";
+			
+		}else{
+			return "<div style=\" display:none;height:20px;width:169px;overflow:hidden; border-bottom: 1px solid #B4D5FF;\"><input type=\"text\" style=\"display:none;height:20px;width:100px;\"><a href=\"javascript:;\" class=\"addmark\">添加新记录</a></div>";
 		}
 	}
 ?>
@@ -114,15 +150,15 @@ tbody{
 	  });
 	  $(".addmark").click(function(){
 	  	if($(this).text()!="添加"){
-	  		$(this).prev().removeAttr("style");
+	  		$(this).prev().css("display","");
 	  		$(this).text("添加");
 	  	}else{
 	  		var markcontent=$(this).prev().val();
-	  		var title=$(this).parent().parent().parent().prev().find("a:eq(0)").text();
+	  		var title=$(this).parent().parent().parent().parent().prev().find("a:eq(0)").text();
 	  		if (markcontent!='') {
 	  			$(this).prev().css("display","none");
-	  			$(this).parent().parent().before($("<tr><td></td></tr>").text(markcontent));
-	  			$(this).parent().parent().prev().css({"border":"1px solid #B4D5FF","border-toph":"transparent"});
+	  			$(this).parent().before($("<div></div>").text(markcontent));
+	  			$(this).parent().prev().css({"height":"16px","width":"169px","overflow":"hidden", "border-bottom":"1px solid #B4D5FF"});
 	  			$(this).text("添加新记录");
 	  			var url="print.php?addmark="+markcontent+"&title="+title;
 	  			$.get(url);
@@ -170,7 +206,7 @@ tbody{
 						while ($i <= $per) {
 							$resp=getInfoById($result[$i]['title']);
 							drawBody($resp);
-							drawTable($result[$i]['mark']);
+							drawTable($result[$i]['title']);
 							
 							$i++;
 						}
