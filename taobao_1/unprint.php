@@ -1,8 +1,7 @@
 <?php
+	header("Content-type:text/html;charset=utf-8");
 	require "conndb.inc.php";
 	require_once 'config.php';
-	$sessionKey=$_COOKIE['sessionKey'];
-	$uID=$_COOKIE['uID'];
 
 	$result_page=$operatedb->Execsql("select count(*) from orders where uID='".$uID."' and printStatus=''",$conn);
 	if (isset($_GET['pageNo'])&&!empty($_GET['pageNo'])) {
@@ -25,7 +24,7 @@
 	}
 	function drawBody($resp){
 		echo "<tbody class=\"table\">";
-		echo "<tr style=\"height:8px;\"><td></td></tr>";
+		// echo "<tr style=\"height:8px;\"><td></td></tr>";
 		echo "<tr class=\"tr-head\">";
 		$goodscount=count($resp->trade->orders->order)-1;
 		$m=0;
@@ -43,8 +42,9 @@
 		echo "<td><div class=\"div-buyer-memo\">".@$resp->trade->buyer_memo."</div></td>";
 		echo "<td><div class=\"div-buyer-memo\">".@$resp->trade->seller_memo."</div></td>";
 		echo "<td><div class=\"div-status\">".getOrderStatus($resp->trade->status)."</div></td>";
-		echo "<td><a href=\"javascript:void(0);\" class=\"opener\">打印快递单</a></td>";
+		echo "<td style=\"width:300px;text-align:center;\"><a href=\"javascript:void(0);\" class=\"opener\">打印快递单</a></td>";
 		echo "</tr>";
+		echo "<tr style=\"height:8px;\"><td></td></tr>";
 		echo "</tbody>";
 		$goods="";
 	}
@@ -81,12 +81,12 @@
 </head>
 <body>
 	<div class="container">
-		<div class="row" style="margin-bottom:1px;">
+		<div class="row">
 			<div style="height:170px;"><?php include 'top.html';?></div>
 		</div>
 		<div class="row">
 			<?php include 'leftside.html';?>
-			<div style="width:1092px;margin:0 auto;border-width:thin;border:1px solid #dddddd; padding:10px;">
+			<div style="width:1114px;margin:0 auto;">
 				<table class="table">
 					<?php
 						$result=$operatedb->Execsql("select * from orders where uID='".$uID."' and printStatus='' limit ".$pagenum.",20",$conn);
@@ -114,14 +114,9 @@
 	</div>
 <div class="row" style="float:right;padding-right:35px;">
 <?php
- 	$total=$result_page[0][0];
- 	if ($total>=200) {
- 		# code...
- 		$total=200;
- 	}
- 	$page=new Fenye($total,20,'unprint.php');
+ 	$page=new Fenye($result_page[0][0],20,'unprint.php');
  	$page->showFenye($pageNo);
- ?>
+?>
 </div>
 <div id="dialog" title="快递详细"></div>
 </body>

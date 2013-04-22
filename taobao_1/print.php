@@ -1,8 +1,7 @@
 <?php
+	header("Content-type:text/html;charset=utf-8");
 	require "conndb.inc.php";
 	require_once 'config.php';
-	$sessionKey=$_COOKIE['sessionKey'];
-	$uID=$_COOKIE['uID'];
 
 
 	$req = new TradeFullinfoGetRequest;
@@ -107,12 +106,12 @@ $(function(){
 	}elseif (isset($_GET['deleterefund'])&&!empty($_GET['deleterefund'])) {
 		# code...
 		$result=$operatedb->Execsql("delete from refundlist where refundID='".$_GET['deleterefund']."'",$conn);
-	}elseif (isset($_GET['deleteaftersale'])&&!empty($_GET['deleteaftersale'])) {
+	}elseif (isset($_GET['closeaftersale'])&&!empty($_GET['closeaftersale'])) {
 		# code...
-		$result=$operatedb->Execsql("delete from aftersale where uID='".$uID."' and title='".$_GET['deleteaftersale']."'",$conn);
+		$result=$operatedb->Execsql("update aftersale set status='close' where uID='".$uID."' and title='".$_GET['closeaftersale']."' and status='open'",$conn);
 	}elseif (isset($_GET['addmark'])&&!empty($_GET['addmark'])) {
 		# code...
-		$result=$operatedb->Execsql("update aftersale set mark=CONCAT(mark,'mark".$_GET['addmark']."') where uID='".$uID."' and title='".$_GET['title']."'",$conn);
+		$result=$operatedb->Execsql("update aftersale set mark=CONCAT(mark,'mark".$_GET['addmark']."') where uID='".$uID."' and title='".$_GET['title']."' and status='open'",$conn);
 	}elseif (isset($_GET['updatesku'])&&!empty($_GET['updatesku'])) {
 		# code...
 		$result=$operatedb->Execsql("update sku set stock='".$_GET['value']."' where num_iid='".$_GET['updatesku']."' and sku_id='".$_GET['sku']."'",$conn);
@@ -121,7 +120,7 @@ $(function(){
 		$result=$operatedb->Execsql("update sku set warn='".$_GET['value']."' where num_iid='".$_GET['updatewarn']."' and sku_id='".$_GET['sku']."'",$conn);
 	}elseif (isset($_GET['addaftersale'])&&!empty($_GET['addaftersale'])) {
 
-   		$result=$operatedb->Execsql("insert into aftersale values ('','".$uID."','".$_GET['addaftersale']."','')",$conn);
+   		$result=$operatedb->Execsql("insert into aftersale values ('','".$uID."','".$_GET['addaftersale']."','','open')",$conn);
    }
 	
 ?>

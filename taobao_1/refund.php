@@ -1,9 +1,7 @@
 <?php
+	header("Content-type:text/html;charset=utf-8");
 	require "conndb.inc.php";
 	require_once 'config.php';
-	$sessionKey=$_COOKIE['sessionKey'];
-	$uID=$_COOKIE['uID'];
-	
 	require_once 'request.php';
 	getData('refund');
 
@@ -64,13 +62,13 @@ tbody{
 </head>
 <body>
 	<div class="container">
-		<div class="row" style="margin-bottom:1px;">
+		<div class="row">
 			<div style="height:170px;"><?php include 'top.html';?></div>
 		</div>
 		<div class="row">
 			<?php include 'leftside.html';?>
-			<div style="width:1092px;margin:0 auto;border-width:thin;border:1px solid #dddddd; padding:10px;">
-				<table class="table table-bordered table-condensed" style="margin-top: 10px;">
+			<div style="width:1114px;margin:0 auto;">
+				<table class="table table-bordered table-condensed">
 					<colgroup>
 		                <col class="span2"></col>
 		                <col class="span2"></col>
@@ -121,14 +119,9 @@ tbody{
 	</div>
 <div class="row" style="float:right;padding-right:35px;">
 <?php
- 	$total=$result_page[0][0];
- 	if ($total>=200) {
- 		# code...
- 		$total=200;
- 	}
- 	$page=new Fenye($total,20,'refund.php');
+ 	$page=new Fenye($result_page[0][0],20,'refund.php');
  	$page->showFenye($pageNo);
- ?>
+?>
 </div>
 </body>
 </html>
