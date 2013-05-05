@@ -18,7 +18,7 @@
 		require_once 'config.php';
 		global $sessionKey,$appkey,$secretKey,$format,$c;
 		$req = new TradeFullinfoGetRequest;
-		$req->setFields("tid,pic_path,created,status,receiver_name,receiver_state,receiver_city,receiver_district,receiver_address,receiver_mobile,orders.title,orders.num,buyer_memo,seller_memo");
+		$req->setFields("tid,pic_path,created,status,receiver_name,receiver_state,receiver_city,receiver_district,receiver_address,receiver_mobile,orders.title,orders.num,buyer_message,seller_memo");
 		$req->setTid($tid);
 		$resp = $c->execute($req, $sessionKey);
 		return $resp;
@@ -40,7 +40,7 @@
 		echo "<td><div class=\"div-name\">".$resp->trade->receiver_name."</div></td>";
 		echo "<td><div class=\"div-mobile\">".@$resp->trade->receiver_mobile."</div></td>";
 		echo "<td><div class=\"div-address\">".$resp->trade->receiver_state.$resp->trade->receiver_city.$resp->trade->receiver_district.$resp->trade->receiver_address."</div></td>";
-		echo "<td><div class=\"div-buyer-memo\">".@$resp->trade->buyer_memo."</div></td>";
+		echo "<td><div class=\"div-buyer-memo\">".@$resp->trade->buyer_message."</div></td>";
 		echo "<td><div class=\"div-buyer-memo\">".@$resp->trade->seller_memo."</div></td>";
 		echo "<td><div class=\"div-status\">".getOrderStatus($resp->trade->status)."</div></td>";
 		echo "<td style=\"width:300px;text-align:center;\"><a href=\"javascript:void(0);\" class=\"opener\">打印快递单</a></td>";

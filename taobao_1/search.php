@@ -190,12 +190,14 @@
 						while ($j <= $total) {
 							# code...
 							$req = new TradeFullinfoGetRequest;
-							$req->setFields("receiver_address");
+							$req->setFields("receiver_state, receiver_city, receiver_district, receiver_address");
 							$req->setTid($result[$j]['tID']);
 							$resp = $c->execute($req, $sessionKey);
 
-							if ($resp->trade->receiver_address==$search) {
-								# code...
+							if ($resp->trade->receiver_state.
+								$resp->trade->receiver_city.
+								$resp->trade->receiver_district.
+								$resp->trade->receiver_address==$search) {
 								$arr[]=$result[$j]['tID'];
 							}
 							$j++;

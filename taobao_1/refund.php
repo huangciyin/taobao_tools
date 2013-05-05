@@ -22,7 +22,7 @@
 		require_once 'config.php';
 		global $sessionKey,$appkey,$secretKey,$format,$c;
 		$req = new RefundGetRequest;
-		$req->setFields("created,title,reason,refund_id,tid");
+		$req->setFields("created,title,reason,refund_id,tid,status");
 		$req->setRefundId($id);
 		$resp=$c->execute($req,$sessionKey);
 		return $resp;
@@ -74,8 +74,9 @@ tbody{
 					<colgroup>
 		                <col class="span2"></col>
 		                <col class="span2"></col>
-		                <col class="span3"></col>
-		                <col class="span3"></col>
+		                <col class="span2"></col>
+		                <col class="span2"></col>
+						<col class="span2"></col>
 						<col class="span2"></col>
 						<col class="span2"></col>
             		</colgroup>
@@ -86,6 +87,7 @@ tbody{
 							<th>物品名称</th>
 							<th>退款原因</th>
 							<th>申请时间</th>
+							<th>退款状态</th>
 							<th>操作</th>
 						</tr>
 					</thead>
@@ -109,6 +111,7 @@ tbody{
 								echo "<td>".@$resp->refund->title."</td>";
 								echo "<td>".@$resp->refund->reason."</td>";
 								echo "<td>".$resp->refund->created."</td>";
+								echo "<td>".getRefundStatus($resp->refund->status)."</td>";
 								echo "<td><a href=\"http://mai.taobao.com\" class=\"detele\" target=\"_blank\">进入淘宝处理</a></td>";
 								echo "</tr>";
 								$i++;

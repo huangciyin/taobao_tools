@@ -85,32 +85,33 @@
 				# code...
 				$req = new RefundsReceiveGetRequest;
 				$req->setFields("refund_id");
-				$req->setStatus("WAIT_SELLER_AGREE");
 				$resp = $c->execute($req, $sessionKey);
 
 				$pageCount=ceil($resp->total_results/40);
 				$i=1;
 				while ($i <= $pageCount) {
-					// $response=get_url_content("http://".$_SERVER["SERVER_NAME"]."/db.php?type=refund&pageNo=".$i."&sessionKey=".$sessionKey."&uID=".$uID."");
 					$req = new RefundsReceiveGetRequest;
 					$req->setFields("refund_id,created");
-					$req->setStatus("WAIT_SELLER_AGREE");
 					$req->setPageNo($i);
 
 					$resp = $c->execute($req, $sessionKey);
-					// $total=$resp->total_results-1;
 
 					$lastPage=ceil($resp->total_results/40);
 					if ($i<$lastPage) {
-										# code...
-						$total=39;
-					}elseif ($i==$lastPage) {
-						# code...
-						$total=$resp->total_results-($i-1)*40-1;
-					}
+							$total=39;
+						}elseif ($i==$lastPage) {
+							# code...
+							$total=$resp->total_results-($i-1)*40-1;
+						}
 
-					$result_first=$operatedb->Execsql("select * from refundlist where uID='".$uID."' limit 0,1 ",$conn);
-					$time=$result_first[0]['created'];
+					$result_first=$operatedb->Execsql("select * from refundlist where uID='".$uID."' order by created DESC limit 0,1 ",$conn);
+					if ($result_first==true) {
+						# code...
+						$time=$result_first[0]['created'];
+					}else{
+						$time=date("Y-m-d H:i:s",time()-30*24*60*60);
+
+					}
 
 					$arrRefund=array('refundID','uID','created','mark','status');
 					$j=0;
