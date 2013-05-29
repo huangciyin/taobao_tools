@@ -1,8 +1,15 @@
 <?php
 	require "conndb.inc.php";
 	require_once 'config.php';
-	$sessionKey=$_COOKIE['sessionKey'];
-	$uID=$_COOKIE['uID'];
+	// $sessionKey=$_COOKIE['sessionKey'];
+	// $uID=$_COOKIE['uID'];
+	
+	if (empty($sessions)) {
+		echo "place <a href='login.php'>login</a>";exit;
+	}else{
+		$sessionKey = $_SESSION['topsession'];
+		$uID = $_SESSION['uID'];
+	}
 
 	$result_page=$operatedb->Execsql("select count(*) from orders where uID='".$uID."' and printStatus=''",$conn);
 	if (isset($_GET['pageNo'])&&!empty($_GET['pageNo'])) {

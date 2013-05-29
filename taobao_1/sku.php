@@ -1,8 +1,15 @@
 <?php
 	require "conndb.inc.php";
 	require_once 'config.php';
-	$sessionKey=$_COOKIE['sessionKey'];
-	$uID=$_COOKIE['uID'];
+	// $sessionKey=$_COOKIE['sessionKey'];
+	// $uID=$_COOKIE['uID'];
+
+	if (empty($sessions)) {
+		echo "place <a href='login.php'>login</a>";exit;
+	}else{
+		$sessionKey = $_SESSION['topsession'];
+		$uID = $_SESSION['uID'];
+	}
 
 	require_once 'request.php';
 	getData('stock');
@@ -52,7 +59,15 @@
 						@$str.=$str1[2].":".$str1[3];
 						$r++;
 					}
-					echo "<div class=\"list-item\"><span style=\"display:inline-block;width:500px;\">".$str."</span><span style=\"display:inline-block;width:80px;\">".$sku_id."</span><span style=\"display:inline-block;width:100px;text-align:center;\">".$resp->item->skus->sku[0]->quantity."</span><span style=\"display:inline-block;width:100px;text-align:center;\" class=\"stock\"><input type=\"text\" style=\"display:none;\"><a href=\"javascript:;\">".$result_sku[0]['stock']."</a></span><span class=\"warn\" style=\"display:inline-block;width:100px;text-align:center;\"><input type=\"text\" style=\"display:none;\"><a href=\"javascript:;\">".$result_sku[0]['warn']."</a></span></div>";
+					echo "<div class=\"list-item\">
+						 <span style=\"display:inline-block;width:500px;\">".$str."</span>
+						 <span style=\"display:inline-block;width:80px;\">".$sku_id."</span>
+						 <span style=\"display:inline-block;width:100px;text-align:center;\">".$resp->item->skus->sku[0]->quantity."</span>
+						 <span style=\"display:inline-block;width:100px;text-align:center;\" class=\"stock\">
+						 	<input type=\"text\" style=\"display:none;\"><a href=\"javascript:;\">".$result_sku[0]['stock']."</a></span>
+						 <span class=\"warn\" style=\"display:inline-block;width:100px;text-align:center;\">
+						 	<input type=\"text\" style=\"display:none;\"><a href=\"javascript:;\">".$result_sku[0]['warn']."</a></span>
+						 </div>";
 				}
 				$str="";
 				$m++;

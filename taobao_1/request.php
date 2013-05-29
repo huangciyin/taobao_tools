@@ -2,8 +2,14 @@
 	
 	function getData($type){
 		require_once 'config.php';
-		$sessionKey=$_COOKIE['sessionKey'];
-		$uID=$_COOKIE['uID'];
+		// $sessionKey=$_COOKIE['sessionKey'];
+		// $uID=$_COOKIE['uID'];
+
+
+		$sessionKey = $_SESSION['topsession'];
+		$uID = $_SESSION['uID'];
+	
+
 		global $sessionKey,$appkey,$secretKey,$format,$c,$operatedb,$conn;
 		
 		if (!empty($uID)) {

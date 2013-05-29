@@ -1,9 +1,15 @@
 <?php
-
 	require_once "conndb.inc.php";
 	require_once 'config.php';
-	$sessionKey=$_COOKIE['sessionKey'];
-	$uID=$_COOKIE['uID'];
+	// $sessionKey=$_COOKIE['sessionKey'];
+	// $uID=$_COOKIE['uID'];
+
+	if (empty($sessions)) {
+		echo "place <a href='login.php'>login</a>";exit;
+	}else{
+		$sessionKey = $_SESSION['topsession'];
+		$uID = $_SESSION['uID'];
+	}
 
 	if ( isset( $_GET['pageNo']) && !empty( $_GET['pageNo'])) {
 		$pageNo=$_GET['pageNo'];
