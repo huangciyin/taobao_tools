@@ -24,6 +24,64 @@
 		$resp = $c->execute($req, $sessionKey);
 		return $resp;
 	}
+
+	function drawTabel($arr_prop,$arr_sku,$arr_show,$arr_stock,$arr_warn)
+	  {
+	      $num=sizeof($arr_prop);
+	      $i=0;
+	      $arr_first=array();
+	      $arr_second=array();
+	      while ($i <= $num - 1) {
+	        $arr1=explode(";", $arr_prop[$i]);
+	        $arr_d1=explode(":", $arr1[0]);
+	        $arr_d2=explode(":", $arr1[1]);
+	        $str1=$arr_d1[2].":".$arr_d1[3];
+	        $str2=$arr_d2[2].":".$arr_d2[3];
+	        $arr_first[]=$str1;
+	        $arr_second[]=$str2;
+	        $i++;
+	      }
+
+	      $arr2=array_count_values($arr_first);
+	      foreach ($arr2 as $key => $value) {
+	        $arr4=array();
+	        $arr3=explode(":", $key);
+	        $arr4[]=$arr3[1];
+	        $arr4[]=$value;
+	        $arr7[]=$arr4;
+	      }
+
+	      foreach ($arr_second as $key => $value) {
+	        $arr5=explode(":", $value);
+	        $arr6[]=$arr5[1];
+	      }
+
+	      $num_prop=sizeof($arr7);
+	      echo "<table class=\"table table-bordered\"><tbody>";
+	      $r=0;
+	      while ($r <= $num_prop-1) {
+	        echo "<tr>";
+	        echo "<td rowspan=".$arr7[$r][1].">".$arr7[$r][0]."</td>";
+	        $s=0;
+	        while ($s <= $arr7[$r][1]-1) {
+	          echo "<td>".$arr6[$s]."</td>";
+	          echo "<td style=\"width:100px;\">".$arr_sku[$s]."</td>";
+	          echo "<td >".$arr_show[$s]."</td>";
+	          echo "<td class=\"stock\" style=\"width:140px;\"><input type=\"text\" style=\"display:none;\"><a href=\"javascript:;\">".$arr_stock[$s]."</a></td>";
+	          echo "<td class=\"warn\" style=\"width:120px;\"><input type=\"text\" style=\"display:none;\"><a href=\"javascript:;\">".$arr_warn[$s]."</a></td>";
+	          echo "</tr><tr>";
+	          $s++;
+	        }
+	        $arr6=array_slice($arr6, $arr7[$r][1]);
+	        $arr_sku=array_slice($arr_sku, $arr7[$r][1]);
+	        $arr_show=array_slice($arr_show, $arr7[$r][1]);
+	        $arr_stock=array_slice($arr_stock, $arr7[$r][1]);
+	        $arr_warn=array_slice($arr_warn, $arr7[$r][1]);
+	        $r++;
+	      }
+	      echo "</tbody></table>";
+	  }
+
 	function drawBody($resp){
 		require_once 'config.php';
 		global $operatedb,$uID,$conn;
@@ -60,7 +118,7 @@
 						$r++;
 					}
 					echo "<div class=\"list-item\">
-						 <span style=\"display:inline-block;width:500px;\">".$str."</span>
+						 <span style=\"display:inline-block;width:300px;padding-left:200px;\">".$str."</span>
 						 <span style=\"display:inline-block;width:80px;\">".$sku_id."</span>
 						 <span style=\"display:inline-block;width:100px;text-align:center;\">".$resp->item->skus->sku[0]->quantity."</span>
 						 <span style=\"display:inline-block;width:100px;text-align:center;\" class=\"stock\">
@@ -73,6 +131,46 @@
 				$m++;
 			}
 
+		}
+
+		echo "</div>";
+	}
+
+	function drawBody1($resp){
+		require_once 'config.php';
+		global $operatedb,$uID,$conn;
+		echo "<div class=\"div-head\"><span style=\"display:inline-block;width:200px;\"><label style=\"margin-bottom:0px;\">商品编号：".$resp->item->num_iid."</label></span><span>商品名称：".$resp->item->title."</span><span style=\"display:none;\">".$resp->item->pic_url."</span></div>";
+		echo "<div class=\"div-list\" style=\"display:none;\">";
+		echo "<div class=\"div-info\" style=\"height:20px;\"><span style=\"display:inline-block;width:600px;text-align:center;\">销售属性</span><span style=\"display:inline-block;width:100px;text-align:center;\">sku</span><span style=\"display:inline-block;width:120px;text-align:center;\">显示库存</span><span style=\"display:inline-block;width:140px;text-align:center;\">实际库存</span><span style=\"display:inline-block;width:100px;text-align:center;\">设置预警库存</span></div>";
+		$skuscount=count($resp->item->skus->sku);
+		$m=0;
+		if ($skuscount==0) {
+			# code...
+			$skus="empty";
+		}else{
+			while ($m <= $skuscount-1) {
+				if ($skuscount==1) {
+					# code...
+					$prop=$resp->item->skus->sku[0]->properties_name;
+					$sku_id=$resp->item->skus->sku[0]->sku_id;
+					$result_sku=$operatedb->Execsql("select * from sku where num_iid='".$resp->item->num_iid."' and sku_id='".$sku_id."'",$conn);
+					$arr=split(":", $prop);
+					@$str=$arr[2].":".$arr[3];
+					echo "<div class=\"list-item\"><span style=\"display:inline-block;width:580px;\">".$str."</span><span style=\"display:inline-block;width:100px;\">".$resp->item->skus->sku[0]->quantity."</span><span style=\"display:inline-block;width:100px;\">".$result_sku[0]['stock']."</span><span style=\"display:inline-block;width:100px;\">设置预警库存</span></div>";
+				}elseif ($skuscount>1) {
+					# code...
+					$prop=$resp->item->skus->sku[$m]->properties_name;
+					$sku_id=$resp->item->skus->sku[$m]->sku_id;
+					$result_sku=$operatedb->Execsql("select * from sku where num_iid='".$resp->item->num_iid."' and sku_id='".$sku_id."'",$conn);
+					$arr_prop[]=$prop;
+					$arr_sku[]=$sku_id;
+					$arr_show[]=$resp->item->skus->sku[$m]->quantity;
+					$arr_stock[]=$result_sku[0]['stock'];
+					$arr_warn[]=$result_sku[0]['warn'];
+				}
+				$m++;
+			}
+			drawTabel($arr_prop,$arr_sku,$arr_show,$arr_stock,$arr_warn);
 		}
 
 		echo "</div>";
@@ -96,6 +194,7 @@
 <link rel="stylesheet" type="text/css" href="css/base.css">
 <link rel="stylesheet" type="text/css" href="css/forms.css">
 <link rel="stylesheet" type="text/css" href="css/stock.css">
+<link rel="stylesheet" type="text/css" href="css/tables.css">
 <style type="text/css">
 .list-item{
 	border: 1px solid #B4D5FF;
@@ -114,7 +213,7 @@ $(document).ready(function(){
 		  	if(Number($(this).find("a").text())<0)
 		  {
 		  	$(this).css("background-color","red");
-		  	$(this).parent().parent().prev().css("background-color","red");
+		  	$(this).parents().parent().parent().prev().find("label").css("background-color","#43B3DC");
 		  }else if(Number($(this).find("a").text())<Number($(this).next().find("a").text())){
 		  	$(this).css("background-color","yellow");
 		  	$(this).parent().parent().prev().css("background-color","yellow");
@@ -137,7 +236,7 @@ $(document).ready(function(){
 		  	$(this).children("a:eq(0)").text("确定");
 	  	} else{
 	  		var sku=$(this).prev().prev().text();
-	  		var num_iid=$(this).parents().parent().prev().find("label").text().split("商品编号：");
+	  		var num_iid=$(this).parents().parent().parent().prev().find("label").text().split("商品编号：");
 	  		var input=$(this).children("input:eq(0)").val();
 	  		var url="print.php?updatesku="+num_iid[1]+"&sku="+sku+"&value="+input;
 	  		$(this).children("input:eq(0)").css("display","none");
@@ -153,7 +252,7 @@ $(document).ready(function(){
 		  	$(this).children("input:eq(0)").val(value);
 		  	$(this).children("a:eq(0)").text("确定");
 	  	} else{
-	  		var sku=$(this).parent().find("span:eq(1)").text();
+	  		var sku=$(this).prev().prev().prev().text();
 	  		var num_iid=$(this).parents().prev().find("label").text().split("商品编号：");
 	  		var input=$(this).children("input:eq(0)").val();
 	  		var url="print.php?updatewarn="+num_iid[1]+"&sku="+sku+"&value="+input;
@@ -162,18 +261,18 @@ $(document).ready(function(){
 	  		$.get(url);
 	  	};
 	  });
-	  $(".div-head").mouseover(function(){
-	  	var url=$(this).find("span:eq(2)").text();
-	  	var img=$("<img>");
-	  	$(this).before(img);
-	  	$(this).prev().attr("src",url);
-	  	$(this).prev().css({"z-index":"5009","position":"fixed","max-height":"200px","max-width":"200px"});
+	  // $(".div-head").mouseover(function(){
+	  // 	var url=$(this).find("span:eq(2)").text();
+	  // 	var img=$("<img>");
+	  // 	$(this).before(img);
+	  // 	$(this).prev().attr("src",url);
+	  // 	$(this).prev().css({"z-index":"5009","position":"fixed","max-height":"200px","max-width":"200px"});
 
 
-	  });
-	  $(".div-head").mouseout(function(){
-	  	$(this).prev().remove();
-	  });
+	  // });
+	  // $(".div-head").mouseout(function(){
+	  // 	$(this).prev().remove();
+	  // });
 	});
 </script>
 </head>
@@ -202,7 +301,7 @@ $(document).ready(function(){
 
 						$resp=getInfoById($result[$i]['numID']);
 						
-						drawBody($resp);
+						drawBody1($resp);
 
 						$i++;
 					}
