@@ -5,7 +5,7 @@
 	// $uID=$_COOKIE['uID'];
 
 	if (empty($sessions)) {
-		echo "place <a href='login.php'>login</a>";exit;
+		echo "please <a href='login.php'>login</a>";exit;
 	}else{
 		$sessionKey = $_SESSION['topsession'];
 		$uID = $_SESSION['uID'];
@@ -57,7 +57,7 @@
 	      }
 
 	      $num_prop=sizeof($arr7);
-	      echo "<table class=\"table table-bordered\"><tbody>";
+	      echo "<table class=\"table table-bordered\" style=\"margin-top:20px;\"><tbody>";
 	      $r=0;
 	      while ($r <= $num_prop-1) {
 	        echo "<tr>";
@@ -139,7 +139,8 @@
 	function drawBody1($resp){
 		require_once 'config.php';
 		global $operatedb,$uID,$conn;
-		echo "<div class=\"div-head\"><span style=\"display:inline-block;width:200px;\"><label style=\"margin-bottom:0px;\">商品编号：".$resp->item->num_iid."</label></span><span>商品名称：".$resp->item->title."</span><span style=\"display:none;\">".$resp->item->pic_url."</span></div>";
+		echo "<div style=\"height:50px;width:50px;float:left;margin-bottom: 7px;\"><span><img src=\"".$resp->item->pic_url."\" height=\"50px\" width=\"50px\"></span></div>";
+		echo "<div class=\"div-head\"><span style=\"display:inline-block;width:200px;\"><label style=\"margin-bottom:0px;\">商品编号：".$resp->item->num_iid."</label></span><span>商品名称：".$resp->item->title."</span></div>";
 		echo "<div class=\"div-list\" style=\"display:none;\">";
 		echo "<div class=\"div-info\" style=\"height:20px;\"><span style=\"display:inline-block;width:600px;text-align:center;\">销售属性</span><span style=\"display:inline-block;width:100px;text-align:center;\">sku</span><span style=\"display:inline-block;width:120px;text-align:center;\">显示库存</span><span style=\"display:inline-block;width:140px;text-align:center;\">实际库存</span><span style=\"display:inline-block;width:100px;text-align:center;\">设置预警库存</span></div>";
 		$skuscount=count($resp->item->skus->sku);

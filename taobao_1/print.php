@@ -5,7 +5,7 @@
 	// $uID=$_COOKIE['uID'];
 
 	if (empty($sessions)) {
-		echo "place <a href='login.php'>login</a>";exit;
+		echo "please <a href='login.php'>login</a>";exit;
 	}else{
 		$sessionKey = $_SESSION['topsession'];
 		$uID = $_SESSION['uID'];
@@ -82,7 +82,8 @@ $(function(){
 		while ($m <= $orderscount) {
 			# code...
 			$sku_id=$resp->trade->orders->order[$m]->sku_id;
-			$result_minus=$operatedb->Execsql("update sku set stock=stock-1 where num_iid='".$resp->trade->num_iid."' and sku_id='".$sku_id."'",$conn);
+			$order_num=$resp->trade->orders->order[$m]->num;
+			$result_minus=$operatedb->Execsql("update sku set stock=stock-".$order_num." where num_iid='".$resp->trade->num_iid."' and sku_id='".$sku_id."'",$conn);
 			$m++;
 		}
 		$result=$operatedb->Execsql("update orders set printStatus='sent',expressNum='".$_GET['exp_num']."' where tID='".$tID."'",$conn);
