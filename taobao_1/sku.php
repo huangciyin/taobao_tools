@@ -57,7 +57,17 @@
 	      }
 
 	      $num_prop=sizeof($arr7);
-	      echo "<table class=\"table table-bordered\" style=\"margin-top:20px;\"><tbody>";
+	      echo "<table class=\"table table-bordered\">
+	      			<thead>
+	      				<tr>
+	      					<th colspan=2>销售属性</th>
+	      					<th>sku</th>
+	      					<th>显示库存</th>
+	      					<th>实际库存</th>
+	     					<th>设置预警库存</th>
+	      				</tr>
+	      			</thead>
+	      		<tbody>";
 	      $r=0;
 	      while ($r <= $num_prop-1) {
 	        echo "<tr>";
@@ -82,72 +92,21 @@
 	      echo "</tbody></table>";
 	  }
 
+
 	function drawBody($resp){
 		require_once 'config.php';
 		global $operatedb,$uID,$conn;
-		echo "<div class=\"div-head\"><span style=\"display:inline-block;width:200px;\"><label style=\"margin-bottom:0px;\">商品编号：".$resp->item->num_iid."</label></span><span>商品名称：".$resp->item->title."</span><span style=\"display:none;\">".$resp->item->pic_url."</span></div>";
-		echo "<div class=\"div-list\" style=\"display:none;\">";
-		echo "<div class=\"div-info\" style=\"height:20px;\"><span style=\"display:inline-block;width:500px;text-align:center;\">销售属性</span><span style=\"display:inline-block;width:80px;text-align:center;\">sku</span><span style=\"display:inline-block;width:100px;text-align:center;\">显示库存</span><span style=\"display:inline-block;width:100px;text-align:center;\">实际库存</span><span style=\"display:inline-block;width:100px;text-align:center;\">设置预警库存</span></div>";
-		$skuscount=count($resp->item->skus->sku);
-		$m=0;
-		if ($skuscount==0) {
-			# code...
-			$skus="empty";
-		}else{
-			while ($m <= $skuscount-1) {
-				if ($skuscount==1) {
-					# code...
-					$prop=$resp->item->skus->sku[0]->properties_name;
-					$sku_id=$resp->item->skus->sku[0]->sku_id;
-					$result_sku=$operatedb->Execsql("select * from sku where num_iid='".$resp->item->num_iid."' and sku_id='".$sku_id."'",$conn);
-					$arr=split(":", $prop);
-					@$str=$arr[2].":".$arr[3];
-					echo "<div class=\"list-item\"><span style=\"display:inline-block;width:580px;\">".$str."</span><span style=\"display:inline-block;width:100px;\">".$resp->item->skus->sku[0]->quantity."</span><span style=\"display:inline-block;width:100px;\">".$result_sku[0]['stock']."</span><span style=\"display:inline-block;width:100px;\">设置预警库存</span></div>";
-				}elseif ($skuscount>1) {
-					# code...
-					$prop=$resp->item->skus->sku[$m]->properties_name;
-					$sku_id=$resp->item->skus->sku[$m]->sku_id;
-					$result_sku=$operatedb->Execsql("select * from sku where num_iid='".$resp->item->num_iid."' and sku_id='".$sku_id."'",$conn);
-					$arr=split(";", $prop);
-					$count=count($arr);
-					$r=0;
-					while ($r <= $count-1) {
-						# code...
-						$str1=split(":", $arr[$r]);
-						@$str.=$str1[2].":".$str1[3];
-						$r++;
-					}
-					echo "<div class=\"list-item\">
-						 <span style=\"display:inline-block;width:300px;padding-left:200px;\">".$str."</span>
-						 <span style=\"display:inline-block;width:80px;\">".$sku_id."</span>
-						 <span style=\"display:inline-block;width:100px;text-align:center;\">".$resp->item->skus->sku[0]->quantity."</span>
-						 <span style=\"display:inline-block;width:100px;text-align:center;\" class=\"stock\">
-						 	<input type=\"text\" style=\"display:none;\"><a href=\"javascript:;\">".$result_sku[0]['stock']."</a></span>
-						 <span class=\"warn\" style=\"display:inline-block;width:100px;text-align:center;\">
-						 	<input type=\"text\" style=\"display:none;\"><a href=\"javascript:;\">".$result_sku[0]['warn']."</a></span>
-						 </div>";
-				}
-				$str="";
-				$m++;
-			}
-
-		}
-
-		echo "</div>";
-	}
-
-	function drawBody1($resp){
-		require_once 'config.php';
-		global $operatedb,$uID,$conn;
+		$result_alias=$operatedb->Execsql("select * from stocklist where numID='".$resp->item->num_iid."' and uID='".$uID."'",$conn);
 		echo "<div style=\"height:50px;width:50px;float:left;margin-bottom: 7px;\"><span><img src=\"".$resp->item->pic_url."\" height=\"50px\" width=\"50px\"></span></div>";
-		echo "<div class=\"div-head\"><span style=\"display:inline-block;width:200px;\"><label style=\"margin-bottom:0px;\">商品编号：".$resp->item->num_iid."</label></span><span>商品名称：".$resp->item->title."</span></div>";
+		echo "<div class=\"div-head\"><span style=\"display:inline-block;width:200px;\"><label style=\"margin-bottom:0px;\">商品编号：".$resp->item->num_iid."</label></span><span class=\"alise\" style=\"display:inline-block;width:200px;\">商品别名：<input type=\"text\" style=\"display:none;\"><a href=\"javascript:;\">".$result_alias[0]['stockalise']."</a></span><span>商品名称：".$resp->item->title."</span><span class=\"span_toggle\" style=\"float:right; cursor: pointer;\">展开<span></div>";
 		echo "<div class=\"div-list\" style=\"display:none;\">";
-		echo "<div class=\"div-info\" style=\"height:20px;\"><span style=\"display:inline-block;width:600px;text-align:center;\">销售属性</span><span style=\"display:inline-block;width:100px;text-align:center;\">sku</span><span style=\"display:inline-block;width:120px;text-align:center;\">显示库存</span><span style=\"display:inline-block;width:140px;text-align:center;\">实际库存</span><span style=\"display:inline-block;width:100px;text-align:center;\">设置预警库存</span></div>";
+		// echo "<div class=\"div-info\" style=\"height:20px;\"><span style=\"display:inline-block;width:600px;text-align:center;\">销售属性</span><span style=\"display:inline-block;width:100px;text-align:center;\">sku</span><span style=\"display:inline-block;width:120px;text-align:center;\">显示库存</span><span style=\"display:inline-block;width:140px;text-align:center;\">实际库存</span><span style=\"display:inline-block;width:100px;text-align:center;\">设置预警库存</span></div>";
 		$skuscount=count($resp->item->skus->sku);
 		$m=0;
 		if ($skuscount==0) {
 			# code...
 			$skus="empty";
+			echo "<div class=\"list-item\">no data</div>";
 		}else{
 			while ($m <= $skuscount-1) {
 				if ($skuscount==1) {
@@ -202,6 +161,21 @@
 	margin-bottom: 1px;
 	padding-left: 2px;
 }
+#search_btn{
+	position: relative;
+	width: 83px;
+	height: 27px;
+	line-height: 27px;
+	font-size: 16px;
+	background-color: #F89913;
+	color: #fff;
+	border: 0 none #D25102;
+	cursor: pointer;
+	-moz-border-radius: 0 3px 3px 0;
+	-webkit-border-radius: 0 3px 3px 0;
+	-khtml-border-radius: 0 3px 3px 0;
+	border-radius: 0 3px 3px 0;
+}
 </style>
 <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
 <link rel="stylesheet" type="text/css" href="http://code.jquery.com/ui/1.10.1/themes/base/jquery-ui.css">
@@ -214,16 +188,27 @@ $(document).ready(function(){
 		  	if(Number($(this).find("a").text())<0)
 		  {
 		  	$(this).css("background-color","red");
-		  	$(this).parents().parent().parent().prev().find("label").css("background-color","#43B3DC");
+		  	// $(this).parents().parent().parent().prev().find("label").css("background-color","#43B3DC");
+		  	var text_red=$("<span style=\"padding-left:10px; color:red;\"></span>").text("紧急补货");
+		  	$(this).parents().parent().parent().prev().children("span:eq(3)").before(text_red);
 		  }else if(Number($(this).find("a").text())<Number($(this).next().find("a").text())){
 		  	$(this).css("background-color","yellow");
-		  	$(this).parent().parent().prev().css("background-color","yellow");
+		  	// $(this).parents().parent().parent().prev().find("label").css("background-color","yellow");
+		  	var text_yellow=$("<span style=\"padding-left:10px; color:#43B3DC;\"></span>").text("库存提醒");
+		  	$(this).parents().parent().parent().prev().children("span:eq(3)").before(text_yellow);
 		  }else{
 
 		  }
 	  });
-	  $(".div-head").click(function(){
-	  	$(this).next().toggle();
+	  $(".span_toggle").click(function(){
+	  	if ($(this).text()=="展开") {
+	  		$(this).parent().next().toggle();
+	  		$(this).text("合并");
+	  	}else if($(this).text()!="展开"){
+	  		$(this).parent().next().toggle();
+	  		$(this).text("展开");
+	  	}
+	  	
 	  });
 	  $(".stock").mouseover(function(){
 	  	$(this).attr("title","点击修改");
@@ -262,6 +247,24 @@ $(document).ready(function(){
 	  		$.get(url);
 	  	};
 	  });
+
+	  $(".alise").click(function(){
+	  	if ($(this).children("a:eq(0)").text()!="确定") {
+	  		var value=$(this).children("a:eq(0)").text();
+		  	$(this).children("input:eq(0)").removeAttr("style");
+		  	$(this).children("input:eq(0)").css({"height":"20","width":"70"});
+		  	$(this).children("input:eq(0)").val(value);
+		  	$(this).children("a:eq(0)").text("确定");
+		}else{
+	  		var num_iid=$(this).parent().children().find("label").text().split("商品编号：");
+	  		var input=$(this).children("input:eq(0)").val();
+	  		var url="print.php?updatealise="+num_iid[1]+"&value="+input;
+	  		$(this).children("input:eq(0)").css("display","none");
+	  		$(this).children("a:eq(0)").text(input);
+	  		$.get(url);
+		};
+	  });
+
 	  // $(".div-head").mouseover(function(){
 	  // 	var url=$(this).find("span:eq(2)").text();
 	  // 	var img=$("<img>");
@@ -302,7 +305,7 @@ $(document).ready(function(){
 
 						$resp=getInfoById($result[$i]['numID']);
 						
-						drawBody1($resp);
+						drawBody($resp);
 
 						$i++;
 					}

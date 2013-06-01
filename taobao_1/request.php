@@ -162,7 +162,7 @@
 						$total=$resp->total_results-($i-1)*40-1;
 					}
 
-					$arrStock=array('uID','numId','stock');
+					$arrStock=array('uID','numId','stockalise');
 					$j=0;
 					while ($j <= $total) {
 						# code...
@@ -173,7 +173,7 @@
 							// $result_update=$operatedb->Execsql("update stocklist set stock='".$stock."' where numID='".$numID."'",$conn);
 							$j++;
 						}else{
-							$strStock=sprintf("insert into stocklist (%s) values ('%s','%s','')",implode(',',$arrStock),$uID,$numID);
+							$strStock=sprintf("insert into stocklist (%s) values ('%s','%s','请设置')",implode(',',$arrStock),$uID,$numID);
 							$result_insert=$operatedb->Execsql($strStock,$conn);
 							$j++;
 						}

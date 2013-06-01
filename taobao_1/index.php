@@ -6,7 +6,7 @@
 
 	
 	if (empty($sessions)) {
-		echo "place <a href='login.php'>login</a>";exit;
+		echo "please <a href='login.php'>login</a>";exit;
 	}else{
 		$sessionKey = $_SESSION['topsession'];
 		$uID = $_SESSION['uID'];
@@ -209,13 +209,17 @@ $(function(){
 							require_once 'search.php';
 							$result_search=search($_POST['search']);
 							$total_result=count($result_search);
-							$per=$total_result-1;
-							$i=0;
-							while ($i <= $per) {
-								$resp=getInfoById($result_search[$i]);
-								drawBody($resp);
-								$i++;
-							}
+							if ($total_result!=0) {
+								$per=$total_result-1;
+								$i=0;
+								while ($i <= $per) {
+									$resp=getInfoById($result_search[$i]);
+									drawBody($resp);
+									$i++;
+								}
+							}else{
+								echo "<script type=\"text/javascript\">alert(\"没有记录\");</script>";
+							}	
 						}else{
 							$result_page=$operatedb->Execsql("select count(uID) from orders where uID='".$uID."'",$conn);
 							$itemNum=($pageNo-1)*20;

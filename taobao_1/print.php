@@ -130,6 +130,8 @@ $(function(){
 	}elseif (isset($_GET['addaftersale'])&&!empty($_GET['addaftersale'])) {
 
    		$result=$operatedb->Execsql("insert into aftersale values ('','".$uID."','".$_GET['addaftersale']."','','open')",$conn);
+   }elseif (isset($_GET['updatealise'])&&!empty($_GET['updatealise'])) {
+   		$result=$operatedb->Execsql("update stocklist set stockalise='".$_GET['value']."' where numID='".$_GET['updatealise']."' and uID='".$uID."'",$conn);
    }
 	
 ?>

@@ -4,7 +4,7 @@
 	// $sessionKey=$_COOKIE['sessionKey'];
 	// $uID=$_COOKIE['uID'];
 	if (empty($sessions)) {
-		echo "place <a href='login.php'>login</a>";exit;
+		echo "please <a href='login.php'>login</a>";exit;
 	}else{
 		$sessionKey = $_SESSION['topsession'];
 		$uID = $_SESSION['uID'];
@@ -56,6 +56,21 @@ li{
 }
 tbody{
 	font-size: 12px;
+}
+#search_btn{
+	position: relative;
+	width: 83px;
+	height: 27px;
+	line-height: 27px;
+	font-size: 16px;
+	background-color: #F89913;
+	color: #fff;
+	border: 0 none #D25102;
+	cursor: pointer;
+	-moz-border-radius: 0 3px 3px 0;
+	-webkit-border-radius: 0 3px 3px 0;
+	-khtml-border-radius: 0 3px 3px 0;
+	border-radius: 0 3px 3px 0;
 }
 </style>
 <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
