@@ -2,9 +2,11 @@
 	color: #404040;
 	background: #e8f2ff;
 	border: 1px solid #B4D5FF;
-	height: 20px;
+	height: 50px;
 	margin-bottom: 5px;
 	cursor: pointer;
+	width: 1060px;
+	float: right;
 }
 li{
 	display: inline;
